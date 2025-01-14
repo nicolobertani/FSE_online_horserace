@@ -4,4 +4,4 @@
 */.ipynb_checkpoints
 */.vscode
 */.pytest
-.db.sqlite3
+db.sqlite3
