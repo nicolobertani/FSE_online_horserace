@@ -39,6 +39,47 @@ class Instructions(Page):
 
 
 # ******************************************************************************************************************** #
+# *** PAGE PRACTICE *** #
+# ******************************************************************************************************************** #
+class Practice(Page):
+
+    # form model and form fields
+    # ----------------------------------------------------------------------------------------------------------------
+    form_model = 'player'
+    form_fields = ['practice_choice']
+
+    # variables for template
+    # ----------------------------------------------------------------------------------------------------------------
+    def vars_for_template(self):
+
+        vars = vars_for_all_templates(self)
+        vars.update({
+            'x_str': f"{experiment_text['amount_currency']}{shared_info['x']}",
+            'x_prob': f"{shared_info['practice_p'] * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'y_str' : f"{experiment_text['amount_currency']}{shared_info['y']}",
+            'y_prob' : f"{(1 - shared_info['practice_p']) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'z_str': f"{experiment_text['amount_currency']}{shared_info["practice_z"]:.2f}".rstrip('0').rstrip('.')
+        })
+        return vars
+
+
+# ******************************************************************************************************************** #
+# *** PAGE COMPREHENSION QUESTION *** #
+# ******************************************************************************************************************** #
+class ComprehensionQuestion(Page):
+
+    # form model and form fields
+    # ----------------------------------------------------------------------------------------------------------------
+    form_model = 'player'
+    form_fields = ['question1', 'question2']
+
+    # variables for template
+    # ----------------------------------------------------------------------------------------------------------------
+    def vars_for_template(self):
+        return vars_for_all_templates(self)
+
+
+# ******************************************************************************************************************** #
 # *** PAGE DECISION *** #
 # ******************************************************************************************************************** #
 class Decision(Page):
@@ -100,35 +141,6 @@ class Results(Page):
             'option_to_pay':   option_to_pay,
             'payoff_relevant': payoff_relevant,
             'payoff':          self.player.in_round(choice_to_pay).payoff
-        })
-        return vars
-
-
-# ******************************************************************************************************************** #
-# *** PAGE PRACTICE *** #
-# ******************************************************************************************************************** #
-class Practice(Page):
-
-    # form model and form fields
-    # ----------------------------------------------------------------------------------------------------------------
-    form_model = 'player'
-    form_fields = ['practice_choice']
-
-    # variables for template
-    # ----------------------------------------------------------------------------------------------------------------
-    def vars_for_template(self):
-
-        # specify info for progress bar
-        total = Constants.num_choices
-        page = self.subsession.round_number
-        progress = page / total * 100
-
-        vars = vars_for_all_templates(self)
-        vars.update({
-            'page':        page,
-            'total':       total,
-            'progress':    progress,
-            'sure_payoff': self.participant.vars['icl_sure_payoffs'][page - 1]
         })
         return vars
 

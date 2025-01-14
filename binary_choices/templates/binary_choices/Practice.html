@@ -2,58 +2,39 @@
 {% load staticfiles otree %}
 {% load i18n %}
 
-{# ****************************************************************************************************************** #}
-{# *** STYLES *** #}
-{# ****************************************************************************************************************** #}
 {% block styles %}
     <link href="{% static 'binary_choices/css/custom.css' %}" rel="stylesheet">
 {% endblock %}
 
-{# ****************************************************************************************************************** #}
-{# *** TITLE *** #}
-{# ****************************************************************************************************************** #}
 {% block title %}
-    {% trans "Practice Page" %}
+    {% trans "Practice Question" %}
 {% endblock %}
 
-{# ****************************************************************************************************************** #}
-{# *** CONTENT *** #}
-{# ****************************************************************************************************************** #}
 {% block content %}
 
     <div class="wrapper">
 
-        <!-- ------------------------------------------------------------------------------------------------------- -->
-        <!-- Progress Bar -->
-        <!-- ------------------------------------------------------------------------------------------------------- -->
-        {% if Constants.progress_bar == True %}
-            <label>
-                {% blocktrans trimmed with page=page total=total %}
-                    Page {{ page }} of {{ total }}
-                {% endblocktrans %}
-            </label>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width:{{ progress|json }}%;">
-                    <span class="sr-only"></span>
-                </div>
-            </div>
-        {% endif %}
-
         <form method="post">
-            <!-- ------------------------------------------------------------------------------------------------------- -->
             <!-- Table - Lottery Decisions (Option A/B) -->
-            <!-- ------------------------------------------------------------------------------------------------------- -->
             <div class="card">
                 <div class="card-header">
-                    {% trans "What do you prefer?" %}
+                    Which of the following options do you prefer?
                 </div>
                 <table class="table">
                     <tr>
                         <th>{% trans "Option A:" %}</th>
                         <td>
-                            {% blocktrans trimmed with p_hi=p_hi hi=hi p_lo=p_lo lo=lo %}
-                                a {{ p_hi }} chance of winning {{ hi }} and <br/>
-                                a {{ p_lo }} chance of winning {{ lo }}
+                            {% blocktrans trimmed %}
+                            <p>
+                                A lottery where you can either receive:
+                            </p>
+                            <p>
+                                &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
+                                <br>
+                                &emsp;or
+                                <br>
+                                &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
+
                             {% endblocktrans %}
                         </td>
                         <td>
@@ -71,9 +52,8 @@
                             {% trans "Option B:" %}
                         </th>
                         <td>
-                            {% blocktrans trimmed with sure_payoff=sure_payoff %}
-                                an amount of {{ sure_payoff }}
-                                as a sure payment
+                            {% blocktrans trimmed %}
+                                Receiving <strong>{{ z_str }}</strong> for sure.
                             {% endblocktrans %}
                         </td>
                         <td>
@@ -88,10 +68,6 @@
                     </tr>
                 </table>
             </div>
-
-            <button class="btn btn-primary btn-lg btn-block" type="submit">
-                {% trans "I confirm my choice" %}
-            </button>
 
             {% if Constants.buttons == False %}
                 {% next_button %}
