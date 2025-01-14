@@ -44,14 +44,6 @@ class Constants(BaseConstants):
     # --- Overall Settings and Appearance --- #
     # ---------------------------------------------------------------------------------------------------------------- #
 
-    # add "indifference" option
-    # if <indifference = False>, subjects can only reveal their preference for either "Option A" or "Option B"
-    # if <indifference = True>, an additional option is available to indicate indifference between Option "A" and "B"
-    # whenever a subject chooses "Indifferent", the iteration procedure stops as indifference is already reached
-    # thus, if a subject chooses "Indifferent" in some choice <x>, all subsequent choices are automatically skipped
-    # if an "Indifferent" choice is drawn for payoff, it's randomly determined whether "A" or "B" constitute the payment
-    indifference = False
-
     # render buttons instead of radio buttons
     # if <buttons = True>, a button will be displayed for each choice ("A", "B", "Indifferent") instead of radio buttons
     # that is, subjects only click a single button than rather choosing a radio button and clicking on "Next"
@@ -79,6 +71,6 @@ class Constants(BaseConstants):
     # --- oTree Settings (Don't Modify) --- #
     # ---------------------------------------------------------------------------------------------------------------- #
 
-    name_in_url = 'icl'
+    name_in_url = 'binary_choices'
     players_per_group = None
     num_rounds = num_choices

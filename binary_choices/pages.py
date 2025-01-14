@@ -38,12 +38,6 @@ class Instructions(Page):
 # ******************************************************************************************************************** #
 class Decision(Page):
 
-    # only display if previous choice was not "indifferent"
-    # ----------------------------------------------------------------------------------------------------------------
-    def is_displayed(self):
-        previous_choices = [p.choice for p in self.player.in_previous_rounds()]
-        return 'I' not in previous_choices
-
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'

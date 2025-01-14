@@ -98,34 +98,6 @@
                         {% endif %}
                     </td>
                 </tr>
-                {% if Constants.indifference == True %}
-                <tr>
-                    <th>
-                    </th>
-                    <td>
-                        {% trans "I'm indifferent between Option A and Option B" %}
-                    </td>
-                    <td>
-                        {% if Constants.buttons == True %}
-                            {% if option_to_pay == 'I' %}
-                                <button class="btn btn-success choice" disabled>
-                                    {% trans "Indifferent" %}
-                                </button>
-                            {% else %}
-                                <button class="btn btn-primary choice" disabled>
-                                    {% trans "Indifferent" %}
-                                </button>
-                            {% endif %}
-                        {% else %}
-                            {% if option_to_pay == 'I' %}
-                                <input type="radio" style="pointer-events: none;" checked="checked">
-                            {% else %}
-                                <input type="radio" style="pointer-events: none;">
-                            {% endif %}
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endif %}
             </table>
         </div>
         <br/>

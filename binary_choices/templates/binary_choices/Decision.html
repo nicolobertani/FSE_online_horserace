@@ -89,24 +89,6 @@
                             {% endif %}
                         </td>
                     </tr>
-                    {% if Constants.indifference == True %}
-                    <tr>
-                        <th>
-                        </th>
-                        <td>
-                            {% trans "I'm indifferent between Option A and Option B" %}
-                        </td>
-                        <td>
-                            {% if Constants.buttons == True %}
-                                <button class="btn btn-primary choice" name="choice" value="I" required>
-                                    {% trans "Indifferent" %}
-                                </button>
-                            {% else %}
-                                <input type="radio" name="choice" value="I" required>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endif %}
                 </table>
             </div>
 

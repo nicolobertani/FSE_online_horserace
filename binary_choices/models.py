@@ -63,8 +63,6 @@ class Player(BasePlayer):
                 next_sure_payoff = self.participant.vars['icl_sure_payoffs'][self.round_number - 1] + Constants.delta / 2 ** (self.round_number - 1)
             elif self.choice == 'B':
                 next_sure_payoff = self.participant.vars['icl_sure_payoffs'][self.round_number - 1] - Constants.delta / 2 ** (self.round_number - 1)
-            else:
-                next_sure_payoff = self.participant.vars['icl_sure_payoffs'][self.round_number - 1]
 
             self.participant.vars['icl_sure_payoffs'].append(float(next_sure_payoff))
 
@@ -75,9 +73,6 @@ class Player(BasePlayer):
         if self.choice == 'B':
             self.participant.vars['icl_switching_row'] -= 2 ** (Constants.num_choices - self.round_number)
 
-        elif self.choice == 'I':
-            self.participant.vars['icl_switching_row'] /= 2
-
     # set payoffs
     # ----------------------------------------------------------------------------------------------------------------
     def set_payoffs(self):
@@ -85,9 +80,9 @@ class Player(BasePlayer):
         current_round = self.subsession.round_number
         current_choice = self.in_round(current_round).choice
 
-        # set payoff if all choices have been completed or if "indifferent" was chosen
+        # set payoff if all choices have been completed
         # ------------------------------------------------------------------------------------------------------------
-        if current_round == Constants.num_rounds or current_choice == 'I':
+        if current_round == Constants.num_rounds:
 
             # randomly determine which choice to pay
             # --------------------------------------------------------------------------------------------------------
@@ -101,9 +96,7 @@ class Player(BasePlayer):
 
             # determine whether the lottery or sure payoff is relevant for payment
             # --------------------------------------------------------------------------------------------------------
-            self.in_round(choice_to_pay).payoff_relevant = random.choice(['A','B']) \
-                if self.in_round(choice_to_pay).choice == 'I' \
-                else self.in_round(choice_to_pay).choice
+            self.in_round(choice_to_pay).payoff_relevant = self.in_round(choice_to_pay).choice
 
             # set player's payoff
             # --------------------------------------------------------------------------------------------------------
