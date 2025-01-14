@@ -6,10 +6,10 @@ from binary_choices.config import *
 import random
 
 
-author = 'Felix Holzmeister'
+author = 'Nicolò Bertani'
 
 doc = """
-Staircase risk elicitation task as proposed by Falk et al. (2016), Working Paper.
+This is decription of the binary_choices app.
 """
 
 
