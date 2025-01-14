@@ -148,7 +148,7 @@ class Results(Page):
 # ******************************************************************************************************************** #
 # *** PAGE SEQUENCE *** #
 # ******************************************************************************************************************** #
-page_sequence = [Practice, Decision]
+page_sequence = [Practice, ComprehensionQuestion, Decision]
 
 if Constants.instructions:
     page_sequence.insert(0, Instructions)

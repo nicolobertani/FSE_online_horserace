@@ -1,0 +1,81 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{% block styles %}
+    <link href="{% static 'binary_choices/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+    {% trans "Comprehension Questions" %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+
+        <form method="post">
+            <!-- Question 1 -->
+            <div class="card">
+                <div class="card-header">
+                    {% trans "Question 1: What is the probability of winning the high lottery outcome?" %}
+                </div>
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question1" value="option1" required>
+                        <label class="form-check-label">
+                            {% trans "Option 1: 50%" %}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question1" value="option2" required>
+                        <label class="form-check-label">
+                            {% trans "Option 2: 75%" %}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question1" value="option3" required>
+                        <label class="form-check-label">
+                            {% trans "Option 3: 100%" %}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br/>
+
+            <!-- Question 2 -->
+            <div class="card">
+                <div class="card-header">
+                    {% trans "Question 2: What is the sure payoff amount?" %}
+                </div>
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question2" value="option1" required>
+                        <label class="form-check-label">
+                            {% trans "Option 1: $100" %}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question2" value="option2" required>
+                        <label class="form-check-label">
+                            {% trans "Option 2: $160" %}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="question2" value="option3" required>
+                        <label class="form-check-label">
+                            {% trans "Option 3: $200" %}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br/>
+
+            <button class="btn btn-primary btn-lg btn-block" type="submit">
+                {% trans "Submit" %}
+            </button>
+        </form>
+
+    </div>
+
+{% endblock %}
