@@ -2,17 +2,23 @@ from otree.api import Currency as c, currency_range
 from . import models
 from ._builtin import Page, WaitPage
 from .models import Constants
+from .backend.shared_info import *
 
+print( shared_info )
 
 # variables for all templates
 # --------------------------------------------------------------------------------------------------------------------
 def vars_for_all_templates(self):
-    return {
+    out = shared_info.copy()
+    out.update(experiment_text)
+    out.update(
+    {
         'p_hi': "{0:.1f}".format(Constants.probability) + "%",
         'p_lo': "{0:.1f}".format(100 - Constants.probability) + "%",
         'hi':   c(Constants.lottery_hi),
         'lo':   c(Constants.lottery_lo)
-    }
+    })
+    return out
 
 
 # ******************************************************************************************************************** #
