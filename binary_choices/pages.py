@@ -43,6 +43,9 @@ class Instructions(Page):
 # ******************************************************************************************************************** #
 class Practice(Page):
 
+    def is_displayed(self):
+        return self.subsession.round_number == 1
+
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'
@@ -68,10 +71,13 @@ class Practice(Page):
 # ******************************************************************************************************************** #
 class ComprehensionQuestion(Page):
 
+    def is_displayed(self):
+        return self.subsession.round_number == 1
+
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'
-    form_fields = ['question1', 'question2']
+    form_fields = ['comp_q1', 'comp_q2']
 
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------

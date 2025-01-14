@@ -47,8 +47,8 @@ class Player(BasePlayer):
     practice_choice = models.BooleanField()
     choice = models.StringField()
     switching_row = models.IntegerField()
-    question1 = models.StringField()
-    question2 = models.StringField()
+    comp_q1 = models.StringField()
+    comp_q2 = models.StringField()
 
     # set sure payoff for next choice
     # ----------------------------------------------------------------------------------------------------------------
