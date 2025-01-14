@@ -4,7 +4,6 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 from .backend.shared_info import *
 
-print( shared_info )
 
 # variables for all templates
 # --------------------------------------------------------------------------------------------------------------------
@@ -13,8 +12,8 @@ def vars_for_all_templates(self):
     out.update(experiment_text)
     out.update(
     {
-        'p_hi': "{0:.1f}".format(Constants.probability) + "%",
-        'p_lo': "{0:.1f}".format(100 - Constants.probability) + "%",
+        'p_hi': "{0:.0f}".format(Constants.probability) + "%",
+        'p_lo': "{0:.0f}".format(100 - Constants.probability) + "%",
         'hi':   c(Constants.lottery_hi),
         'lo':   c(Constants.lottery_lo)
     })
@@ -106,9 +105,38 @@ class Results(Page):
 
 
 # ******************************************************************************************************************** #
+# *** PAGE PRACTICE *** #
+# ******************************************************************************************************************** #
+class Practice(Page):
+
+    # form model and form fields
+    # ----------------------------------------------------------------------------------------------------------------
+    form_model = 'player'
+    form_fields = ['practice_choice']
+
+    # variables for template
+    # ----------------------------------------------------------------------------------------------------------------
+    def vars_for_template(self):
+
+        # specify info for progress bar
+        total = Constants.num_choices
+        page = self.subsession.round_number
+        progress = page / total * 100
+
+        vars = vars_for_all_templates(self)
+        vars.update({
+            'page':        page,
+            'total':       total,
+            'progress':    progress,
+            'sure_payoff': self.participant.vars['icl_sure_payoffs'][page - 1]
+        })
+        return vars
+
+
+# ******************************************************************************************************************** #
 # *** PAGE SEQUENCE *** #
 # ******************************************************************************************************************** #
-page_sequence = [Decision]
+page_sequence = [Practice, Decision]
 
 if Constants.instructions:
     page_sequence.insert(0, Instructions)

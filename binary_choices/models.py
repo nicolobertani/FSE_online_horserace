@@ -44,6 +44,7 @@ class Player(BasePlayer):
     random_draw = models.IntegerField()
     payoff_relevant = models.StringField()
     sure_payoff = models.FloatField()
+    practice_choice = models.BooleanField()
     choice = models.StringField()
     switching_row = models.IntegerField()
 
