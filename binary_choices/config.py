@@ -1,8 +1,7 @@
 # <imports>
 from otree.api import Currency as c
 from otree.constants import BaseConstants
-# </imports>
-
+from .backend.shared_info import *
 
 # ******************************************************************************************************************** #
 # *** CLASS CONSTANTS *** #
@@ -73,4 +72,4 @@ class Constants(BaseConstants):
 
     name_in_url = 'binary_choices'
     players_per_group = None
-    num_rounds = num_choices
+    num_rounds = len(shared_info['set_p_bisection']) * shared_info["number_bisection_steps"] + shared_info['number_test_questions'] + 1

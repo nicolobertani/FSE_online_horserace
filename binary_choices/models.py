@@ -1,9 +1,11 @@
+import random
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
 from binary_choices.config import *
-import random
+from binary_choices.backend.shared_info import *
+import binary_choices.backend.bisection_engine as q_engine
 
 
 author = 'Nicolò Bertani'
@@ -21,10 +23,17 @@ class Subsession(BaseSubsession):
     # initiate list of sure payoffs and implied switching row in first round
     # ------------------------------------------------------------------------------------------------------------
     def creating_session(self):
+        
         if self.round_number == 1:
-            for p in self.get_players():
-                p.participant.vars['icl_sure_payoffs'] = [c(Constants.sure_payoff)]
-                p.participant.vars['icl_switching_row'] = 2 ** Constants.num_choices
+            for i, p in enumerate(self.get_players()):
+
+                p.participant.vars.update({
+                    'experimental_design' : [i], #incomplete
+                    'winning_participant' : random.random() < share_winners,
+                    'last_q' : False,
+                    'large_opt_first' : random.choice([True, False]),
+                })
+        
         self.session.vars['num_rounds'] = Constants.num_rounds
 
 
@@ -42,16 +51,22 @@ class Player(BasePlayer):
 
     # add model fields to class player
     # ----------------------------------------------------------------------------------------------------------------
+
+    # player model
+    player_model = q_engine.Bisection()
     
-    # choices
-    random_draw = models.IntegerField()
-    payoff_relevant = models.StringField()
-    sure_payoff = models.FloatField()
+    # records
+    ## choices
+    ### practice
     practice_choice = models.BooleanField()
-    choice = models.StringField()
-    switching_row = models.IntegerField()
     comp_q1 = models.StringField()
     comp_q2 = models.StringField()
+
+    ### main
+    p_x = models.FloatField()
+    z = models.FloatField()
+    choice = models.StringField()
+    s = models.BooleanField()
     
     # timestamps
     instruction_timestamp = models.StringField()
@@ -60,6 +75,16 @@ class Player(BasePlayer):
     intro_timestamp = models.StringField()
     q_timestamp = models.StringField()
     end_timestamp = models.StringField()
+
+    # payoffs
+    winning_participant = models.BooleanField()
+    winning_choice = models.IntegerField()
+    
+    # old
+    switching_row = models.IntegerField()
+    random_draw = models.IntegerField()
+    payoff_relevant = models.StringField()
+    sure_payoff = models.FloatField()
 
     # set sure payoff for next choice
     # ----------------------------------------------------------------------------------------------------------------

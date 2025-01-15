@@ -14,15 +14,8 @@ def vars_for_all_templates(self):
     out.update(experiment_text)
     out.update(
     {
-        # new variables
-        'x_str': f"{experiment_text['amount_currency']}{shared_info['x']}",
+        'x_str' : f"{experiment_text['amount_currency']}{shared_info['x']}",
         'y_str' : f"{experiment_text['amount_currency']}{shared_info['y']}",
-
-        # legacy variables
-        'p_hi': "{0:.0f}".format(Constants.probability) + "%",
-        'p_lo': "{0:.0f}".format(100 - Constants.probability) + "%",
-        'hi':   c(Constants.lottery_hi),
-        'lo':   c(Constants.lottery_lo)
     })
     return out
 
@@ -140,6 +133,9 @@ class ExpIntro(Page):
 # ******************************************************************************************************************** #
 class Decision(Page):
 
+    def is_displayed(self):
+        return self.player.participant.vars['last_q'] == False
+
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'
@@ -150,36 +146,29 @@ class Decision(Page):
     def vars_for_template(self):
 
         self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if self.subsession.round_number == 1:
+            self.player.z = (shared_info["x"] + shared_info["y"]) / 2
+            self.player.p_x = shared_info["set_p_bisection"][0]
+        else:
+            self.player.s = self.player.in_round(self.subsession.round_number - 1).choice == 'lottery'
+            (z, p_x), self.player.participant.vars['last_q'] = self.player.player_model.next_question(self.player.s)
+            self.player.z = z
+            self.player.p_x = p_x
 
         # specify info for progress bar
-        total = Constants.num_choices
         page = self.subsession.round_number
-        progress = page / total * 100
 
         vars = vars_for_all_templates(self)
         vars.update({
-            # new variables
-            'x_prob': f"{shared_info['practice_p'] * 100:.2f}".rstrip('0').rstrip('.') + "%",
-            'y_prob' : f"{(1 - shared_info['practice_p']) * 100:.2f}".rstrip('0').rstrip('.') + "%",
-            'z_str': f"{experiment_text['amount_currency']}{shared_info["practice_z"]:.2f}".rstrip('0').rstrip('.'),
-
-            # old variables
-            'page':        page,
-            'total':       total,
-            'progress':    progress,
-            'sure_payoff': self.participant.vars['icl_sure_payoffs'][page - 1],
-            'large_opt_first' : random.choice([True, False]),
+            'page': page,
+            'x_prob': f"{self.player.p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'y_prob' : f"{(1 - self.player.p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'z_str': f"{self.player.z:.2f}".rstrip('0').rstrip('.'),
             'lottery_first' : random.choice([True, False]),
+            'large_opt_first' : self.player.participant.vars['large_opt_first'],
 
         })
         return vars
-
-    # set sure payoffs for next choice, payoffs, and switching row
-    # ----------------------------------------------------------------------------------------------------------------
-    def before_next_page(self):
-        self.player.set_sure_payoffs()
-        self.player.update_switching_row()
-        self.player.set_payoffs()
 
 
 # ******************************************************************************************************************** #
@@ -190,7 +179,7 @@ class Results(Page):
     # skip results until last page
     # ----------------------------------------------------------------------------------------------------------------
     def is_displayed(self):
-        return self.subsession.round_number == Constants.num_rounds
+        return self.player.participant.vars['last_q'] == True
 
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
@@ -199,6 +188,8 @@ class Results(Page):
         self.player.end_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # payoff information
+        self.winning_participant = self.player.participant.vars['winning_participant']
+        
         choice_to_pay = self.participant.vars['icl_choice_to_pay']
         option_to_pay = self.player.in_round(choice_to_pay).choice
         payoff_relevant = self.player.in_round(choice_to_pay).payoff_relevant

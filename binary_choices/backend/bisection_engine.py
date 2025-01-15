@@ -26,6 +26,7 @@ class Bisection:
         self.iteration = 0
         self.n_train_iterations = len(shared_info['set_p_bisection']) * shared_info["number_bisection_steps"]
         self.finished = False
+        self.last_q = False
 
         # first question
         self.z = (shared_info["x"] + shared_info["y"]) / 2
@@ -57,6 +58,10 @@ class Bisection:
     def check_finished(self):
         if self.iteration == (self.n_train_iterations + shared_info['number_test_questions'] - 1):
             self.finished = True
+
+    def check_last_q(self):
+        if self.iteration == (self.n_train_iterations + shared_info['number_test_questions'] - 2):
+            self.last_q = True
 
     def get_finished(self):
         return self.finished
@@ -142,8 +147,10 @@ class Bisection:
 
     def next_question(self, answer):
         self.check_finished()
-    
-        if self.iteration < self.n_train_iterations:
-            return self.next_question_train(answer)
-        elif self.iteration < self.n_train_iterations + shared_info['number_test_questions']:
-            return self.next_question_test(answer)
+        self.check_last_q()
+
+        still_training = self.iteration < self.n_train_iterations
+        if still_training:
+            return self.next_question_train(answer), self.last_q
+        elif not self.finished:
+            return self.next_question_test(answer), self.last_q
