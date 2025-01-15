@@ -108,6 +108,17 @@ class ComprehensionQuestion(Page):
 
         return vars
 
+class ExpIntro(Page):
+
+    # only display instruction in round 1
+    # ----------------------------------------------------------------------------------------------------------------
+    def is_displayed(self):
+        return self.subsession.round_number == 1
+
+    def vars_for_template(self):
+        return vars_for_all_templates(self)
+
+
 
 # ******************************************************************************************************************** #
 # *** PAGE DECISION *** #
@@ -178,7 +189,7 @@ class Results(Page):
 # ******************************************************************************************************************** #
 # *** PAGE SEQUENCE *** #
 # ******************************************************************************************************************** #
-page_sequence = [Practice, ComprehensionQuestion, Decision]
+page_sequence = [Practice, ComprehensionQuestion, ExpIntro, Decision]
 
 if Constants.instructions:
     page_sequence.insert(0, Instructions)

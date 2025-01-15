@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{% block styles %}
+    <link href="{% static 'binary_choices/css/custom.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block title %}
+    The experiment is about to start!
+{% endblock %}
+
+{% block content %}
+    <div class="wrapper instructions">
+        {% for instruction in instructions_reminder %}
+            <p>{{ instruction }}</p>
+        {% endfor %}
+    </div>
+
+    {% next_button %}
+{% endblock %}

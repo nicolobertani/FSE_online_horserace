@@ -51,12 +51,12 @@ experiment_text = {
         "Press the button below to proceed to the practice question."
     ],
     
-    "instructions_reminder" : f"""
+    "instructions_reminder" : ["""
     The previous question was just for practice.
     The experiment will now start.
-    
-    All choices you will make from now could be selected to be added to your final payment.
     """,
+    "All choices you will make from now could be selected to be added to your final payment."
+    ],
     
     "comp_instructions" : "Please read the instructions carefully and answer the question below.",
 
