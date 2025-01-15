@@ -25,16 +25,27 @@
                         <tr>
                             <th>{% trans "Option A:" %}</th>
                             <td>
-                                {% blocktrans trimmed with p_hi=p_hi hi=hi p_lo=p_lo lo=lo %}
+                                {% blocktrans trimmed %}
+                                <p>
+                                    A lottery where you can either receive:
+                                </p>
+                                <p>
                                     {% if large_opt_first %}
-                                        a {{ p_hi }} chance of winning {{ hi }} and <br/>
-                                        a {{ p_lo }} chance of winning {{ lo }}
+                                        &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
                                     {% else %}
-                                        a {{ p_lo }} chance of winning {{ lo }} and <br/>
-                                        a {{ p_hi }} chance of winning {{ hi }}
+                                        &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
                                     {% endif %}
+                                    <br>
+                                    &emsp;or
+                                    <br>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
+                                    {% endif %}
+                                </p>
                                 {% endblocktrans %}
-                            </td>
+                                </td>
                             <td>
                                 <input type="radio" name="choice" value="lottery" required>
                             </td>
@@ -42,9 +53,8 @@
                         <tr>
                             <th>{% trans "Option B:" %}</th>
                             <td>
-                                {% blocktrans trimmed with sure_payoff=sure_payoff %}
-                                    an amount of {{ sure_payoff }}
-                                    as a sure payment
+                                {% blocktrans trimmed %}
+                                    Receiving <strong>{{ z_str }}</strong> for sure.
                                 {% endblocktrans %}
                             </td>
                             <td>
@@ -55,9 +65,8 @@
                         <tr>
                             <th>{% trans "Option A:" %}</th>
                             <td>
-                                {% blocktrans trimmed with sure_payoff=sure_payoff %}
-                                    an amount of {{ sure_payoff }}
-                                    as a sure payment
+                                {% blocktrans trimmed %}
+                                    Receiving <strong>{{ z_str }}</strong> for sure.
                                 {% endblocktrans %}
                             </td>
                             <td>
@@ -67,33 +76,36 @@
                         <tr>
                             <th>{% trans "Option B:" %}</th>
                             <td>
-                                {% blocktrans trimmed with p_hi=p_hi hi=hi p_lo=p_lo lo=lo %}
-                                {% if large_opt_first %}
-                                    a {{ p_hi }} chance of winning {{ hi }} and <br/>
-                                    a {{ p_lo }} chance of winning {{ lo }}
-                                {% else %}
-                                    a {{ p_lo }} chance of winning {{ lo }} and <br/>
-                                    a {{ p_hi }} chance of winning {{ hi }}
-                                {% endif %}
-                            {% endblocktrans %}
+                                {% blocktrans trimmed %}
+                                <p>
+                                    A lottery where you can either receive:
+                                </p>
+                                <p>
+                                    {% if large_opt_first %}
+                                    &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
+                                    {% else %}
+                                    &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
+                                    {% endif %}
+                                    <br>
+                                    &emsp;or
+                                    <br>
+                                    {% if large_opt_first %}
+                                    &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
+                                    {% else %}
+                                    &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
+                                    {% endif %}
+                                </p>
+                                {% endblocktrans %}
                             </td>
                             <td>
-                                {% if Constants.buttons == True %}
-                                    <button class="btn btn-primary choice" name="choice" value="A" required>
-                                        {% trans "Option A" %}
-                                    </button>
-                                {% else %}
-                                    <input type="radio" name="choice" value="lottery" required>
-                                {% endif %}
+                                <input type="radio" name="choice" value="lottery" required>
                             </td>
                         </tr>
                     {% endif %}
                 </table>
             </div>
 
-            {% if Constants.buttons == False %}
-                {% next_button %}
-            {% endif %}
+            {% next_button %}
         </form>
 
     </div>

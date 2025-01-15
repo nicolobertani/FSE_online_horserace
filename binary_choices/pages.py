@@ -14,6 +14,11 @@ def vars_for_all_templates(self):
     out.update(experiment_text)
     out.update(
     {
+        # new variables
+        'x_str': f"{experiment_text['amount_currency']}{shared_info['x']}",
+        'y_str' : f"{experiment_text['amount_currency']}{shared_info['y']}",
+
+        # legacy variables
         'p_hi': "{0:.0f}".format(Constants.probability) + "%",
         'p_lo': "{0:.0f}".format(100 - Constants.probability) + "%",
         'hi':   c(Constants.lottery_hi),
@@ -64,9 +69,7 @@ class Practice(Page):
 
         vars = vars_for_all_templates(self)
         vars.update({
-            'x_str': f"{experiment_text['amount_currency']}{shared_info['x']}",
             'x_prob': f"{shared_info['practice_p'] * 100:.2f}".rstrip('0').rstrip('.') + "%",
-            'y_str' : f"{experiment_text['amount_currency']}{shared_info['y']}",
             'y_prob' : f"{(1 - shared_info['practice_p']) * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'z_str': f"{experiment_text['amount_currency']}{shared_info["practice_z"]:.2f}".rstrip('0').rstrip('.')
         })
@@ -155,6 +158,12 @@ class Decision(Page):
 
         vars = vars_for_all_templates(self)
         vars.update({
+            # new variables
+            'x_prob': f"{shared_info['practice_p'] * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'y_prob' : f"{(1 - shared_info['practice_p']) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'z_str': f"{experiment_text['amount_currency']}{shared_info["practice_z"]:.2f}".rstrip('0').rstrip('.'),
+
+            # old variables
             'page':        page,
             'total':       total,
             'progress':    progress,
