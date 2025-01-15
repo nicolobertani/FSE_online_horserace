@@ -25,6 +25,7 @@ class Subsession(BaseSubsession):
             for p in self.get_players():
                 p.participant.vars['icl_sure_payoffs'] = [c(Constants.sure_payoff)]
                 p.participant.vars['icl_switching_row'] = 2 ** Constants.num_choices
+        self.session.vars['num_rounds'] = Constants.num_rounds
 
 
 # ******************************************************************************************************************** #
