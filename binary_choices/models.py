@@ -42,6 +42,8 @@ class Player(BasePlayer):
 
     # add model fields to class player
     # ----------------------------------------------------------------------------------------------------------------
+    
+    # choices
     random_draw = models.IntegerField()
     payoff_relevant = models.StringField()
     sure_payoff = models.FloatField()
@@ -50,6 +52,14 @@ class Player(BasePlayer):
     switching_row = models.IntegerField()
     comp_q1 = models.StringField()
     comp_q2 = models.StringField()
+    
+    # timestamps
+    instruction_timestamp = models.StringField()
+    practice_timestamp = models.StringField()
+    comp_timestamp = models.StringField()
+    intro_timestamp = models.StringField()
+    q_timestamp = models.StringField()
+    end_timestamp = models.StringField()
 
     # set sure payoff for next choice
     # ----------------------------------------------------------------------------------------------------------------

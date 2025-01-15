@@ -1,4 +1,5 @@
 import random
+import datetime
 from otree.api import Currency as c, currency_range
 from . import models
 from ._builtin import Page, WaitPage
@@ -32,6 +33,9 @@ class Instructions(Page):
         return self.subsession.round_number == 1
 
     def vars_for_template(self):
+        
+        self.player.instruction_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         vars = vars_for_all_templates(self)
         vars.update({
             'n': Constants.num_choices
@@ -55,6 +59,8 @@ class Practice(Page):
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
     def vars_for_template(self):
+
+        self.player.practice_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         vars = vars_for_all_templates(self)
         vars.update({
@@ -84,6 +90,8 @@ class ComprehensionQuestion(Page):
     # ----------------------------------------------------------------------------------------------------------------
     def vars_for_template(self):
         
+        self.player.comp_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         practice_lottery_text = experiment_text["sentence_lottery"].format(
             f"{experiment_text['amount_currency']}{shared_info['x']}",
             f"{shared_info['practice_p'] * 100:.2f}".rstrip('0').rstrip('.') + "%",
@@ -117,6 +125,9 @@ class ExpIntro(Page):
         return self.subsession.round_number == 1
 
     def vars_for_template(self):
+
+        self.player.intro_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         return vars_for_all_templates(self)
 
 
@@ -134,6 +145,8 @@ class Decision(Page):
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
     def vars_for_template(self):
+
+        self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # specify info for progress bar
         total = Constants.num_choices
@@ -173,6 +186,8 @@ class Results(Page):
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
     def vars_for_template(self):
+
+        self.player.end_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # payoff information
         choice_to_pay = self.participant.vars['icl_choice_to_pay']
