@@ -63,9 +63,9 @@ class Player(BasePlayer):
         # ------------------------------------------------------------------------------------------------------------
         if not self.round_number == Constants.num_choices:
 
-            if self.choice == 'A':
+            if self.choice == 'lottery':
                 next_sure_payoff = self.participant.vars['icl_sure_payoffs'][self.round_number - 1] + Constants.delta / 2 ** (self.round_number - 1)
-            elif self.choice == 'B':
+            elif self.choice == 'sure_amount':
                 next_sure_payoff = self.participant.vars['icl_sure_payoffs'][self.round_number - 1] - Constants.delta / 2 ** (self.round_number - 1)
 
             self.participant.vars['icl_sure_payoffs'].append(float(next_sure_payoff))
@@ -74,7 +74,7 @@ class Player(BasePlayer):
     # ----------------------------------------------------------------------------------------------------------------
     def update_switching_row(self):
 
-        if self.choice == 'B':
+        if self.choice == 'sure_amount':
             self.participant.vars['icl_switching_row'] -= 2 ** (Constants.num_choices - self.round_number)
 
     # set payoffs
@@ -104,11 +104,11 @@ class Player(BasePlayer):
 
             # set player's payoff
             # --------------------------------------------------------------------------------------------------------
-            if self.in_round(choice_to_pay).payoff_relevant == 'A':
+            if self.in_round(choice_to_pay).payoff_relevant == 'lottery':
                 self.in_round(choice_to_pay).payoff = Constants.lottery_hi \
                     if self.in_round(choice_to_pay).random_draw <= Constants.probability \
                     else Constants.lottery_lo
-            elif self.in_round(choice_to_pay).payoff_relevant == 'B':
+            elif self.in_round(choice_to_pay).payoff_relevant == 'sure_amount':
                 self.in_round(choice_to_pay).payoff = self.participant.vars['icl_sure_payoffs'][choice_to_pay - 1]
 
             # set payoff as global variable

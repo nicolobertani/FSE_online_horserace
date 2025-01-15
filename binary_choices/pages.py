@@ -1,3 +1,4 @@
+import random
 from otree.api import Currency as c, currency_range
 from . import models
 from ._builtin import Page, WaitPage
@@ -144,7 +145,10 @@ class Decision(Page):
             'page':        page,
             'total':       total,
             'progress':    progress,
-            'sure_payoff': self.participant.vars['icl_sure_payoffs'][page - 1]
+            'sure_payoff': self.participant.vars['icl_sure_payoffs'][page - 1],
+            'large_opt_first' : random.choice([True, False]),
+            'lottery_first' : random.choice([True, False]),
+
         })
         return vars
 
@@ -181,7 +185,7 @@ class Results(Page):
             'sure_payoff':     sure_payoff,
             'option_to_pay':   option_to_pay,
             'payoff_relevant': payoff_relevant,
-            'payoff':          self.player.in_round(choice_to_pay).payoff
+            'payoff':          self.player.in_round(choice_to_pay).payoff,
         })
         return vars
 
