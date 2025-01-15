@@ -72,7 +72,7 @@ experiment_text = {
     # "sentence_lottery" : "A lottery where you can either receive {} with {} probability, or receive {} otherwise.",
     # "sentence_lottery" : "A lottery that will pay:\n\n{} with {} probability,\nor\n{} with {} probability.",
     
-    "sentence_lottery" : "A lottery where you can either receive:\n\n{} with {} probability,\nor\n{} with {} probability.",
+    "sentence_lottery" : "A lottery where you can either receive:\n\n{} with {} probability\nor\n{} with {} probability.",
     
     "confirm" : "I confirm my choice.",
     

@@ -82,7 +82,31 @@ class ComprehensionQuestion(Page):
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
     def vars_for_template(self):
-        return vars_for_all_templates(self)
+        
+        practice_lottery_text = experiment_text["sentence_lottery"].format(
+            f"{experiment_text['amount_currency']}{shared_info['x']}",
+            f"{shared_info['practice_p'] * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            f"{experiment_text['amount_currency']}{shared_info['y']}",
+            f"{(1 - shared_info['practice_p']) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+        )
+
+        practice_sure_text = experiment_text["sentence_sure"].format(
+            f"{experiment_text['amount_currency']}{shared_info["practice_z"]:.2f}".rstrip('0').rstrip('.')
+        )
+
+        vars = vars_for_all_templates(self)
+        vars.update({
+            'comp_q1_text': experiment_text["comp_q1"].format(practice_lottery_text.rstrip('.').replace('\n', ' ')),
+            'comp_q1_opt1' : f"{experiment_text['amount_currency']}{shared_info['practice_z']}".rjust(5),
+            'comp_q1_opt2' : f"{experiment_text['amount_currency']}{shared_info['x']}".rjust(5),
+            'comp_q1_opt3' : f"{experiment_text['amount_currency']}{shared_info['y']}".rjust(5),
+            'comp_q2_text': experiment_text["comp_q2"].format(practice_sure_text.rstrip('.').replace('\n', ' ')),
+            'comp_q2_opt1' : f"{experiment_text['amount_currency']}{shared_info['practice_z']}".rjust(5),
+            'comp_q2_opt2' : f"{experiment_text['amount_currency']}{shared_info['x']}".rjust(5),
+            'comp_q2_opt3' : f"{experiment_text['amount_currency']}{shared_info['y']}".rjust(5),
+        })
+
+        return vars
 
 
 # ******************************************************************************************************************** #
