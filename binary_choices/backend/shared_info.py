@@ -27,6 +27,7 @@ shared_info.update({
 
 currency = "$"
 fixed_payment = "3"
+share_winners = 1/30
 
 # Set question text
 experiment_text = {

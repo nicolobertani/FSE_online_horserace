@@ -26,10 +26,27 @@
 
     <div class="wrapper">
 
+        {% if not is_winner %}
+            <div class="card info">
+                {% blocktrans trimmed with fixed_payment=fixed_payment %}
+                <p>
+                    Unfortunately, you were not selected for the bonus payment this time.
+                </p>
+                <p>
+                    However, you will receive a participation fee of {{ fixed_payment }}.
+                </p>
+                {% endblocktrans %}
+            </div>
+
+        {% else %}
+            
         <div class="card info">
-            {% blocktrans trimmed %}
+            <p>
+                Congratulations! You were selected for the bonus payment.
+            </p>
+            <p>
                 The following decision was randomly chosen for your payment:
-            {% endblocktrans %}
+            </p>
         </div>
         <br/>
 
@@ -44,28 +61,24 @@
                 <tr>
                     <th>{% trans "Option A:" %}</th>
                     <td>
-                        {% blocktrans trimmed with p_hi=p_hi hi=hi p_lo=p_lo lo=lo %}
-                            a {{ p_hi }} chance of winning {{ hi }} and <br/>
-                            a {{ p_lo }} chance of winning {{ lo }}
+                        {% blocktrans trimmed %}
+                        <p>
+                            A lottery where you can either receive:
+                        </p>
+                        <p>
+                            &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
+                            <br>
+                            &emsp;or
+                            <br>
+                            &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
+                        </p>
                         {% endblocktrans %}
                     </td>
                     <td>
-                        {% if Constants.buttons == True %}
-                            {% if option_to_pay == 'lottery' %}
-                                <button class="btn btn-success choice" disabled>
-                                    {% trans "Option A" %}
-                                </button>
-                            {% else %}
-                                <button class="btn btn-primary choice" disabled>
-                                    {% trans "Option A" %}
-                                </button>
-                            {% endif %}
+                        {% if winning_s == 0 %}
+                            <input type="radio" style="pointer-events: none;" checked="checked">
                         {% else %}
-                            {% if option_to_pay == 'lottery' %}
-                                <input type="radio" style="pointer-events: none;" checked="checked">
-                            {% else %}
-                                <input type="radio" style="pointer-events: none;">
-                            {% endif %}
+                            <input type="radio" style="pointer-events: none;">
                         {% endif %}
                     </td>
                 </tr>
@@ -74,27 +87,15 @@
                         {% trans "Option B:" %}
                     </th>
                     <td>
-                        {% blocktrans trimmed with sure_payoff=sure_payoff %}
-                            an amount of {{ sure_payoff }} as a sure payment
+                        {% blocktrans trimmed %}
+                            Receiving <strong>{{ z_str }}</strong> for sure.
                         {% endblocktrans %}
                     </td>
                     <td>
-                        {% if Constants.buttons == True %}
-                            {% if option_to_pay == 'sure_amount' %}
-                                <button class="btn btn-success choice" disabled>
-                                    {% trans "Option B" %}
-                                </button>
-                            {% else %}
-                                <button class="btn btn-primary choice" disabled>
-                                    {% trans "Option B" %}
-                                </button>
-                            {% endif %}
+                        {% if winning_s == 1 %}
+                            <input type="radio" style="pointer-events: none;" checked="checked">
                         {% else %}
-                            {% if option_to_pay == 'sure_amount' %}
-                                <input type="radio" style="pointer-events: none;" checked="checked">
-                            {% else %}
-                                <input type="radio" style="pointer-events: none;">
-                            {% endif %}
+                            <input type="radio" style="pointer-events: none;">
                         {% endif %}
                     </td>
                 </tr>
@@ -107,24 +108,30 @@
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <div class="card info">
 
-            {% blocktrans trimmed with option_to_pay=option_to_pay %}
-                As indicated above, you decided for "Option {{ option_to_pay }}" in this choice.
-                <br/>
-            {% endblocktrans %}
+            <div>
+                {% if winning_s == 0 %}
+                    As indicated above, you decided for the lottery in this choice.
+                    <br/>
+                    For the lottery, one of the two possible outcomes has been randomly drawns using a computer simulation with the corresponding probabilities.
+                    <br/>
+                    The outcome of the lottery was {{ extra_payoff }}.
 
-            {% if payoff_relevant == "lottery" %}
-                <br/>
-                {% trans "For the lottery, one of the two possible outcomes has been randomly drawns using a computer simulation with the corresponding probabilities." %}
-            {% endif %}
+                {% else %}
+                    As indicated above, you decided for the sure amount in this choice.
+                {% endif %}
+            </div>
 
             <br/>
-            {% blocktrans trimmed with payoff=payoff %}
-                Your payoff in this task equals {{ payoff }}.
+            {% blocktrans trimmed %}
+                Therefore, for your participation you will receive a participation fee of {{ fixed_payment }} plus a bonus payment equal to {{ extra_payoff }}.
             {% endblocktrans %}
+            
+            {% endif %}
+            <p>
+                Thank you for participating in this experiment.
+            </p>
+            
         </div>
-
     </div>
-
-    {% next_button %}
 
 {% endblock %}

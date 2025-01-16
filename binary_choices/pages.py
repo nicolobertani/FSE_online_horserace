@@ -1,5 +1,6 @@
 import random
 import datetime
+import pandas as pd
 from otree.api import Currency as c, currency_range
 from . import models
 from ._builtin import Page, WaitPage
@@ -14,6 +15,7 @@ def vars_for_all_templates(self):
     out.update(experiment_text)
     out.update(
     {
+        'fixed_payment' : f"{experiment_text['amount_currency']}{fixed_payment}",
         'x_str' : f"{experiment_text['amount_currency']}{shared_info['x']}",
         'y_str' : f"{experiment_text['amount_currency']}{shared_info['y']}",
     })
@@ -139,7 +141,7 @@ class Decision(Page):
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'
-    form_fields = ['choice']
+    form_fields = ['choice', 'p_x', 'z', 's']    
 
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
@@ -150,23 +152,19 @@ class Decision(Page):
             self.player.z = (shared_info["x"] + shared_info["y"]) / 2
             self.player.p_x = shared_info["set_p_bisection"][0]
         else:
-            self.player.s = self.player.in_round(self.subsession.round_number - 1).choice == 'lottery'
-            (z, p_x), self.player.participant.vars['last_q'] = self.player.player_model.next_question(self.player.s)
+            self.player.s = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
+            (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(self.player.s)
             self.player.z = z
             self.player.p_x = p_x
 
-        # specify info for progress bar
-        page = self.subsession.round_number
-
         vars = vars_for_all_templates(self)
         vars.update({
-            'page': page,
+            'page': self.subsession.round_number,
             'x_prob': f"{self.player.p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'y_prob' : f"{(1 - self.player.p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'z_str': f"{self.player.z:.2f}".rstrip('0').rstrip('.'),
             'lottery_first' : random.choice([True, False]),
             'large_opt_first' : self.player.participant.vars['large_opt_first'],
-
         })
         return vars
 
@@ -187,20 +185,43 @@ class Results(Page):
 
         self.player.end_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # payoff information
-        self.winning_participant = self.player.participant.vars['winning_participant']
-        
-        choice_to_pay = self.participant.vars['icl_choice_to_pay']
-        option_to_pay = self.player.in_round(choice_to_pay).choice
-        payoff_relevant = self.player.in_round(choice_to_pay).payoff_relevant
-        sure_payoff = self.player.participant.vars['icl_sure_payoffs'][choice_to_pay - 1]
+        # if self.player.participant.vars['winning_participant']:
+        if True:
 
+            all_answers = pd.concat([
+                self.player.participant.vars['player_model'].get_train_answers(), 
+                self.player.participant.vars['player_model'].get_test_answers()
+                ]).reset_index(drop=True)
+            all_answers = all_answers.dropna(subset=['s'])
+
+            self.player.random_draw = random.randrange(0, all_answers.shape[0])
+            self.player.participant.vars['winning_choice'] = self.player.random_draw + 1
+            
+            winning_s = all_answers.loc[self.player.random_draw, 's']
+            winning_p_x = all_answers.loc[self.player.random_draw, 'p_x']
+            winning_z = all_answers.loc[self.player.random_draw, 'z']
+            simulated_lottery_outcome = random.random() < winning_p_x
+            
+            if winning_s == 1:
+                extra_payoff = f"{experiment_text['amount_currency']}{winning_z:.2f}".rstrip('0').rstrip('.')
+            else:
+                if simulated_lottery_outcome:
+                    extra_payoff = f"{experiment_text['amount_currency']}{shared_info['x']:.2f}".rstrip('0').rstrip('.')
+                else:
+                    extra_payoff = f"{experiment_text['amount_currency']}{shared_info['y']:.2f}".rstrip('0').rstrip('.')
+            
+            self.player.participant.vars['extra_payoff'] = extra_payoff
+                
         vars = vars_for_all_templates(self)
         vars.update({
-            'sure_payoff':     sure_payoff,
-            'option_to_pay':   option_to_pay,
-            'payoff_relevant': payoff_relevant,
-            'payoff':          self.player.in_round(choice_to_pay).payoff,
+            # 'is_winner' : self.player.participant.vars['winning_participant'],
+            'is_winner' : True,
+            'all_answers' : all_answers,
+            'winning_s' : winning_s,
+            'x_prob': f"{winning_p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'y_prob' : f"{(1 - winning_p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'z_str': f"{winning_z:.2f}".rstrip('0').rstrip('.'),
+            'extra_payoff' : extra_payoff,
         })
         return vars
 
