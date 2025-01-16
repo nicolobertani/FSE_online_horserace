@@ -12,7 +12,7 @@ shared_info = {
         "p_x" : [.01, .05, .10, .25, .4, .5, .6, .75, .9, .95, .99],
         "w_p" : [.01, .05, .10, .25, .4, .5, .6, .75, .9, .95, .99]
     }),
-    "number_test_questions" : 5,
+    "number_test_questions" : 3, # 2 or less becomes problematic for the code
 }
 
 shared_info.update({
@@ -22,7 +22,7 @@ shared_info.update({
 
 shared_info.update({
     'set_p_bisection' : np.arange(0, 1, 1/6)[1:],
-    'number_bisection_steps' : 5,
+    'number_bisection_steps' : 2,
 })
 
 currency = "$"
