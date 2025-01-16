@@ -2,130 +2,119 @@
 {% load staticfiles otree %}
 {% load i18n %}
 
-
-{# ****************************************************************************************************************** #}
-{# *** STYLES *** #}
-{# ****************************************************************************************************************** #}
 {% block styles %}
     <link href="{% static 'binary_choices/css/custom.css' %}" rel="stylesheet">
 {% endblock %}
 
-
-{# ****************************************************************************************************************** #}
-{# *** TITLE *** #}
-{# ****************************************************************************************************************** #}
 {% block title %}
-    {% trans "Results" %}
+    You have now completed the experiment!
 {% endblock %}
 
-
-{# ****************************************************************************************************************** #}
-{# *** CONTENT *** #}
-{# ****************************************************************************************************************** #}
 {% block content %}
 
     <div class="wrapper">
+        {% if real_incentives %}
+            {% if not is_winner %}
+                <div class="card info">
+                    {% blocktrans trimmed with fixed_payment=fixed_payment %}
+                    <p>
+                        Unfortunately, you were not selected for the bonus payment this time.
+                    </p>
+                    <p>
+                        However, you will receive a participation fee of {{ fixed_payment }}.
+                    </p>
+                    {% endblocktrans %}
+                </div>
 
-        {% if not is_winner %}
+            {% else %}
+                
             <div class="card info">
-                {% blocktrans trimmed with fixed_payment=fixed_payment %}
                 <p>
-                    Unfortunately, you were not selected for the bonus payment this time.
+                    Congratulations! You were selected for the bonus payment.
                 </p>
                 <p>
-                    However, you will receive a participation fee of {{ fixed_payment }}.
+                    The following decision was randomly chosen for your payment:
                 </p>
-                {% endblocktrans %}
             </div>
-
-        {% else %}
-            
-        <div class="card info">
-            <p>
-                Congratulations! You were selected for the bonus payment.
-            </p>
-            <p>
-                The following decision was randomly chosen for your payment:
-            </p>
-        </div>
-        <br/>
-
-        <!-- ------------------------------------------------------------------------------------------------------- -->
-        <!-- Table - Decision -->
-        <!-- ------------------------------------------------------------------------------------------------------- -->
-        <div class="card">
-            <div class="card-header">
-                {% trans "Your choice:" %}
-            </div>
-            <table class="table">
-                <tr>
-                    <th>{% trans "Option A:" %}</th>
-                    <td>
-                        {% blocktrans trimmed %}
-                        <p>
-                            A lottery where you can either receive:
-                        </p>
-                        <p>
-                            &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
-                            <br>
-                            &emsp;or
-                            <br>
-                            &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
-                        </p>
-                        {% endblocktrans %}
-                    </td>
-                    <td>
-                        {% if winning_s == 0 %}
-                            <input type="radio" style="pointer-events: none;" checked="checked">
-                        {% else %}
-                            <input type="radio" style="pointer-events: none;">
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        {% trans "Option B:" %}
-                    </th>
-                    <td>
-                        {% blocktrans trimmed %}
-                            Receiving <strong>{{ z_str }}</strong> for sure.
-                        {% endblocktrans %}
-                    </td>
-                    <td>
-                        {% if winning_s == 1 %}
-                            <input type="radio" style="pointer-events: none;" checked="checked">
-                        {% else %}
-                            <input type="radio" style="pointer-events: none;">
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <br/>
-
-        <!-- ------------------------------------------------------------------------------------------------------- -->
-        <!-- Payoff Information -->
-        <!-- ------------------------------------------------------------------------------------------------------- -->
-        <div class="card info">
-
-            <div>
-                {% if winning_s == 0 %}
-                    As indicated above, you decided for the lottery in this choice.
-                    <br/>
-                    For the lottery, one of the two possible outcomes has been randomly drawns using a computer simulation with the corresponding probabilities.
-                    <br/>
-                    The outcome of the lottery was {{ extra_payoff }}.
-
-                {% else %}
-                    As indicated above, you decided for the sure amount in this choice.
-                {% endif %}
-            </div>
-
             <br/>
-            {% blocktrans trimmed %}
-                Therefore, for your participation you will receive a participation fee of {{ fixed_payment }} plus a bonus payment equal to {{ extra_payoff }}.
-            {% endblocktrans %}
-            
+
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+            <!-- Table - Decision -->
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+            <div class="card">
+                <div class="card-header">
+                    {% trans "Your choice:" %}
+                </div>
+                <table class="table">
+                    <tr>
+                        <th>{% trans "Option A:" %}</th>
+                        <td>
+                            {% blocktrans trimmed %}
+                            <p>
+                                A lottery where you can either receive:
+                            </p>
+                            <p>
+                                &emsp;{{ x_str }} with <strong>{{ x_prob }}</strong> probability
+                                <br>
+                                &emsp;or
+                                <br>
+                                &emsp;{{ y_str }} with <strong>{{ y_prob }}</strong> probability
+                            </p>
+                            {% endblocktrans %}
+                        </td>
+                        <td>
+                            {% if winning_s == 0 %}
+                                <input type="radio" style="pointer-events: none;" checked="checked">
+                            {% else %}
+                                <input type="radio" style="pointer-events: none;">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans "Option B:" %}
+                        </th>
+                        <td>
+                            {% blocktrans trimmed %}
+                                Receiving <strong>{{ z_str }}</strong> for sure.
+                            {% endblocktrans %}
+                        </td>
+                        <td>
+                            {% if winning_s == 1 %}
+                                <input type="radio" style="pointer-events: none;" checked="checked">
+                            {% else %}
+                                <input type="radio" style="pointer-events: none;">
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+            <!-- Payoff Information -->
+            <!-- ------------------------------------------------------------------------------------------------------- -->
+            <div class="card info">
+
+                <div>
+                    {% if winning_s == 0 %}
+                        As indicated above, you decided for the lottery in this choice.
+                        <br/>
+                        For the lottery, one of the two possible outcomes has been randomly drawns using a computer simulation with the corresponding probabilities.
+                        <br/>
+                        The outcome of the lottery was {{ extra_payoff }}.
+
+                    {% else %}
+                        As indicated above, you decided for the sure amount in this choice.
+                    {% endif %}
+                </div>
+
+                <br/>
+                {% blocktrans trimmed %}
+                    Therefore, for your participation you will receive a participation fee of {{ fixed_payment }} plus a bonus payment equal to {{ extra_payoff }}.
+                {% endblocktrans %}
+                
+                {% endif %}
             {% endif %}
             <p>
                 Thank you for participating in this experiment.

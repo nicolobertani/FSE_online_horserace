@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+real_incentives = False
+
 shared_info = {
     "x" : 18,
     'y' : 2,
@@ -29,6 +31,17 @@ currency = "$"
 fixed_payment = "3"
 share_winners = 1/30
 
+# Condiational instructions
+if real_incentives:
+    payment_info = f"""
+        For participating in this experiment, you will receive a fixed payment of {currency}{fixed_payment}.
+        Additionally, you have a chance to be selected to win a bonus payment of up to {currency}{shared_info['x']}, depending on your choices.
+        If you are selected, one of your choices from the experiment will be randomly picked, and the associated reward will be added to your payment.
+        If the chosen reward is a lottery, the bonus payment will be determined by simulating the outcome of that lottery.
+        """
+else: 
+    payment_info = f"For participating in this experiment, you will receive a fixed payment of {currency}{fixed_payment}."
+
 # Set question text
 experiment_text = {
     "welcome" : "Welcome to the experiment!",
@@ -38,7 +51,10 @@ experiment_text = {
         You will be presented with a series of questions.
         In each question, you will choose between receiving a fixed amount of money or participating in a lottery.
         To make your choice, simply select the option you prefer on the screen and then confirm your choice.
-        Please read the options carefully before making your choice.
+        """,
+        """
+        Please take the time to carefully read each option before making your choice. 
+        In each option, the information that can vary between choices is highlighted in bold.
         """,
         "There are no right or wrong answers: we are only interested in your preferences.",
         # f"""
@@ -48,13 +64,8 @@ experiment_text = {
         # If you are selected, one of your choices from the experiment will be randomly picked, and the associated reward will be added to your payment.
         # If the chosen reward is a lottery, the bonus payment will be determined by simulating the outcome of that lottery.
         # """,
-        f"""
-        For participating in this experiment, you will receive a fixed payment of {currency}{fixed_payment}.
-        Additionally, you have a chance to be selected to win a bonus payment of up to {currency}{shared_info['x']}, depending on your choices.
-        If you are selected, one of your choices from the experiment will be randomly picked, and the associated reward will be added to your payment.
-        If the chosen reward is a lottery, the bonus payment will be determined by simulating the outcome of that lottery.
-        """,
-        "You will now be presented with a practice question to help you become familiar with the task, followed by a couple comprehension questions.",
+        payment_info,
+        "You will now be presented with a practice question to help you become familiar with the task, followed by two comprehension questions.",
         "Press the button below to proceed to the practice question."
     ],
     
@@ -63,7 +74,7 @@ experiment_text = {
     The experiment will now start.
     """,
     "All choices you will make from now could be selected to be added to your final payment."
-    ],
+    ], # type: ignore
     
     "comp_instructions" : "Please read the instructions carefully and answer the question below.",
 

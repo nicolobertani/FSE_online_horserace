@@ -208,6 +208,7 @@ class Results(Page):
                 
         vars = vars_for_all_templates(self)
         vars.update({
+            'real_incentives' : real_incentives,
             # 'is_winner' : self.player.participant.vars['winning_participant'],
             'is_winner' : True,
             'winning_s' : winning_s,
