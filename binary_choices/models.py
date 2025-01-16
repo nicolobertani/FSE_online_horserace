@@ -31,7 +31,7 @@ class Subsession(BaseSubsession):
 
                 p.participant.vars.update({
                     # 'player_model' : bisection_engine.Bisection(),
-                    'player_model' : FSE_engine.FSE(),
+                    'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
                     'experimental_design' : [i], #incomplete
                     'winning_participant' : random.random() < share_winners,
                     'last_q' : False,
@@ -79,10 +79,5 @@ class Player(BasePlayer):
     # payoffs
     winning_participant = models.BooleanField()
     winning_choice = models.IntegerField()
-    extra_payoff = models.FloatField()
-    
-    # old
-    switching_row = models.IntegerField()
+    extra_payoff = models.StringField()
     random_draw = models.IntegerField()
-    payoff_relevant = models.StringField()
-    sure_payoff = models.FloatField()

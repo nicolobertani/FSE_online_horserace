@@ -188,18 +188,12 @@ class Results(Page):
         # if self.player.participant.vars['winning_participant']:
         if True:
 
-            all_answers = pd.concat([
-                self.player.participant.vars['player_model'].get_train_answers(), 
-                self.player.participant.vars['player_model'].get_test_answers()
-                ]).reset_index(drop=True)
-            all_answers = all_answers.dropna(subset=['s'])
-
-            self.player.random_draw = random.randrange(0, all_answers.shape[0])
-            self.player.participant.vars['winning_choice'] = self.player.random_draw + 1
+            self.player.random_draw = random.randrange(len(self.player.in_all_rounds()))
+            self.player.winning_choice = self.player.random_draw + 1
             
-            winning_s = all_answers.loc[self.player.random_draw, 's']
-            winning_p_x = all_answers.loc[self.player.random_draw, 'p_x']
-            winning_z = all_answers.loc[self.player.random_draw, 'z']
+            winning_s = self.player.in_round(self.player.random_draw + 1).choice == 'sure_amount'
+            winning_p_x = self.player.in_round(self.player.random_draw + 1).p_x
+            winning_z = self.player.in_round(self.player.random_draw + 1).z
             simulated_lottery_outcome = random.random() < winning_p_x
             
             if winning_s == 1:
@@ -210,13 +204,12 @@ class Results(Page):
                 else:
                     extra_payoff = f"{experiment_text['amount_currency']}{shared_info['y']:.2f}".rstrip('0').rstrip('.')
             
-            self.player.participant.vars['extra_payoff'] = extra_payoff
+            self.player.extra_payoff = extra_payoff
                 
         vars = vars_for_all_templates(self)
         vars.update({
             # 'is_winner' : self.player.participant.vars['winning_participant'],
             'is_winner' : True,
-            'all_answers' : all_answers,
             'winning_s' : winning_s,
             'x_prob': f"{winning_p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'y_prob' : f"{(1 - winning_p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
