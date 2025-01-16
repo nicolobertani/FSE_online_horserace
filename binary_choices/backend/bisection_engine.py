@@ -60,7 +60,7 @@ class Bisection:
             self.finished = True
 
     def check_last_q(self):
-        if self.iteration == (self.n_train_iterations + shared_info['number_test_questions'] - 2):
+        if self.iteration >= (self.n_train_iterations + shared_info['number_test_questions'] - 2):
             self.last_q = True
 
     def get_finished(self):

@@ -141,7 +141,7 @@ class Decision(Page):
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'
-    form_fields = ['choice', 'p_x', 'z', 's']    
+    form_fields = ['choice']    
 
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
@@ -149,11 +149,11 @@ class Decision(Page):
 
         self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if self.subsession.round_number == 1:
-            self.player.z = (shared_info["x"] + shared_info["y"]) / 2
-            self.player.p_x = shared_info["set_p_bisection"][0]
+            self.player.z = self.player.participant.vars['player_model'].z
+            self.player.p_x = self.player.participant.vars['player_model'].p_x
         else:
-            self.player.s = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
-            (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(self.player.s)
+            previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
+            (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(previous_choice)
             self.player.z = z
             self.player.p_x = p_x
 
@@ -162,7 +162,7 @@ class Decision(Page):
             'page': self.subsession.round_number,
             'x_prob': f"{self.player.p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'y_prob' : f"{(1 - self.player.p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
-            'z_str': f"{self.player.z:.2f}".rstrip('0').rstrip('.'),
+            'z_str': f"{experiment_text['amount_currency']}{self.player.z:.2f}".rstrip('0').rstrip('.'),
             'lottery_first' : random.choice([True, False]),
             'large_opt_first' : self.player.participant.vars['large_opt_first'],
         })

@@ -5,7 +5,9 @@ from otree.api import (
 )
 from binary_choices.config import *
 from binary_choices.backend.shared_info import *
-import binary_choices.backend.bisection_engine as q_engine
+import binary_choices.backend.bisection_engine as bisection_engine
+import binary_choices.backend.FSE_engine as FSE_engine
+import binary_choices.backend.Bayesian_engine as Bayesian_engine
 
 
 author = 'Nicolò Bertani'
@@ -28,7 +30,8 @@ class Subsession(BaseSubsession):
             for i, p in enumerate(self.get_players()):
 
                 p.participant.vars.update({
-                    'player_model' : q_engine.Bisection(),
+                    # 'player_model' : bisection_engine.Bisection(),
+                    'player_model' : FSE_engine.FSE(),
                     'experimental_design' : [i], #incomplete
                     'winning_participant' : random.random() < share_winners,
                     'last_q' : False,
@@ -64,7 +67,6 @@ class Player(BasePlayer):
     p_x = models.FloatField()
     z = models.FloatField()
     choice = models.StringField()
-    s = models.BooleanField()
     
     # timestamps
     instruction_timestamp = models.StringField()

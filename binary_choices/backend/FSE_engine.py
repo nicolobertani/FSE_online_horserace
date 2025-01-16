@@ -38,6 +38,7 @@ class FSE:
         self.set_z = set_z
         self.iteration = 0
         self.finished = False
+        self.last_q = False
 
         # initialization for question dataframe
         starting_data = [[self.iteration + 1], [starting_p_x], [starting_z], [(starting_z - shared_info["y"]) / (shared_info["x"] - shared_info["y"])], [None], [None]]
@@ -49,7 +50,7 @@ class FSE:
         
         # first question
         self.z = self.train_answers.loc[self.iteration, "z"]
-        self.p_w = self.train_answers.loc[self.iteration, "p_x"]
+        self.p_x = self.train_answers.loc[self.iteration, "p_x"]
 
         # initialization for LPs
         self.epsilon = np.inf
@@ -94,6 +95,10 @@ class FSE:
     def check_finished(self):
         if (self.epsilon <= 0.1) and (self.test_iteration == (shared_info['number_test_questions'] - 1)):
             self.finished = True
+
+    def check_last_q(self):
+        if (self.epsilon <= 0.1) and (self.test_iteration >= (shared_info['number_test_questions'] - 2)):
+            self.last_q = True
 
     def get_finished(self):
         return self.finished
@@ -219,9 +224,10 @@ class FSE:
 
     def next_question(self, answer):
         self.check_finished()
+        self.check_last_q()
 
         if self.getEpsilon() > 0.1:
-            return self.next_question_train(answer)
+            return self.next_question_train(answer), self.last_q
         elif self.test_iteration < shared_info['number_test_questions']:
-            return self.next_question_test(answer)
+            return self.next_question_test(answer), self.last_q
     
