@@ -149,13 +149,13 @@ class Decision(Page):
 
         self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if self.subsession.round_number == 1:
-            self.player.z = self.player.participant.vars['player_model'].z
-            self.player.p_x = self.player.participant.vars['player_model'].p_x
+            self.player.z = float(self.player.participant.vars['player_model'].z)
+            self.player.p_x = float(self.player.participant.vars['player_model'].p_x)
         else:
             previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
             (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(previous_choice)
-            self.player.z = z
-            self.player.p_x = p_x
+            self.player.z = float(z)
+            self.player.p_x = float(p_x)
 
         vars = vars_for_all_templates(self)
         vars.update({
