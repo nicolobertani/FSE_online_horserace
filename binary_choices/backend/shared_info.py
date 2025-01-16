@@ -12,7 +12,7 @@ shared_info = {
         "p_x" : [.01, .05, .10, .25, .4, .5, .6, .75, .9, .95, .99],
         "w_p" : [.01, .05, .10, .25, .4, .5, .6, .75, .9, .95, .99]
     }),
-    "number_test_questions" : 3, # 2 or less becomes problematic for the code
+    "number_test_questions" : 5, # 2 or less becomes problematic for the code
 }
 
 shared_info.update({
@@ -22,7 +22,7 @@ shared_info.update({
 
 shared_info.update({
     'set_p_bisection' : np.arange(0, 1, 1/6)[1:],
-    'number_bisection_steps' : 2,
+    'number_bisection_steps' : 5,
 })
 
 currency = "$"
@@ -54,7 +54,7 @@ experiment_text = {
         If you are selected, one of your choices from the experiment will be randomly picked, and the associated reward will be added to your payment.
         If the chosen reward is a lottery, the bonus payment will be determined by simulating the outcome of that lottery.
         """,
-        "You will now be presented with a practice question to help you become familiar with the task.",
+        "You will now be presented with a practice question to help you become familiar with the task, followed by a couple comprehension questions.",
         "Press the button below to proceed to the practice question."
     ],
     

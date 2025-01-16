@@ -2,10 +2,10 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-        name='binary_choice',
-        display_name="Binary choice",
+        name='FSE_horserace',
+        display_name="FSE_horserace",
         app_sequence=['binary_choices'],
-        num_demo_participants=10,
+        num_demo_participants=3,
     ),
 ]
 
@@ -19,6 +19,19 @@ SESSION_CONFIG_DEFAULTS = dict(
     participation_fee=3.0, 
     doc=""
 )
+
+ROOMS = [
+    dict(
+        name='FSE_test',
+        display_name='FSE_test',
+    ),
+    dict(
+        name='Prolific',
+        display_name='Prolific',
+        # participant_label_file='_rooms/binary_choices.txt',
+        # use_secure_urls=True,
+    ),
+]
 
 PARTICIPANT_FIELDS = []
 SESSION_FIELDS = []

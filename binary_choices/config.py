@@ -11,7 +11,7 @@ class Constants(BaseConstants):
     num_choices = 5
     name_in_url = 'binary_choices'
     players_per_group = None
-    num_rounds = max([31, len(shared_info['set_p_bisection']) * shared_info["number_bisection_steps"] + shared_info['number_test_questions'] + 1])
+    num_rounds = max([30, len(shared_info['set_p_bisection']) * shared_info["number_bisection_steps"] + shared_info['number_test_questions'] + 1])
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # --- Overall Settings and Appearance --- #
@@ -39,4 +39,6 @@ class Constants(BaseConstants):
     # if <results = True>, a separate page containing all relevant information is displayed after finishing the task
     # if <results = False>, the template "Decision.html" will not be rendered
     results = True
+    completionlink = 'https://app.prolific.com/submissions/complete?cc=C15D3WQ8'
+
 

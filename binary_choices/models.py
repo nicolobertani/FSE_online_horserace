@@ -13,7 +13,7 @@ import binary_choices.backend.Bayesian_engine as Bayesian_engine
 author = 'Nicolò Bertani'
 
 doc = """
-This is decription of the binary_choices app.
+This app sets up a binary choice task to compare FSE, standard bisection, and Bayesian elicitation.
 """
 
 
@@ -28,14 +28,18 @@ class Subsession(BaseSubsession):
         
         if self.round_number == 1:
             for i, p in enumerate(self.get_players()):
-                if i % 2 == 0:
-                    p.participant.vars.update({
-                        'player_model' : bisection_engine.Bisection(),
-                    })
-                else:
-                    p.participant.vars.update({
-                        'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
-                    })
+                
+                p.participant.vars.update({
+                    'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
+                })
+                # if i % 2 == 0:
+                #     p.participant.vars.update({
+                #         'player_model' : bisection_engine.Bisection(),
+                #     })
+                # else:
+                #     p.participant.vars.update({
+                #         'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
+                #     })
 
                 p.participant.vars.update({
                     'experimental_design' : [i], #incomplete
