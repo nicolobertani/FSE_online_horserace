@@ -28,10 +28,16 @@ class Subsession(BaseSubsession):
         
         if self.round_number == 1:
             for i, p in enumerate(self.get_players()):
+                if i % 2 == 0:
+                    p.participant.vars.update({
+                        'player_model' : bisection_engine.Bisection(),
+                    })
+                else:
+                    p.participant.vars.update({
+                        'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
+                    })
 
                 p.participant.vars.update({
-                    # 'player_model' : bisection_engine.Bisection(),
-                    'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
                     'experimental_design' : [i], #incomplete
                     'winning_participant' : random.random() < share_winners,
                     'last_q' : False,
