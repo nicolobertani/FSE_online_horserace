@@ -30,6 +30,10 @@ ROOMS = [
         display_name='FSE_test_prolific',
     ),
     dict(
+        name='bisection_test_prolific',
+        display_name='bisection_test_prolific',
+    ),
+    dict(
         name='Prolific',
         display_name='Prolific',
         # participant_label_file='_rooms/binary_choices.txt',
