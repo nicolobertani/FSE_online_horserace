@@ -35,11 +35,9 @@ class Instructions(Page):
     def vars_for_template(self):
         
         self.player.instruction_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
+        
         vars = vars_for_all_templates(self)
-        vars.update({
-            'n': Constants.num_choices
-        })
+
         return vars
 
 
