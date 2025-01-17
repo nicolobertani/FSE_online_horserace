@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 def check_db_content(db_path):
     # Connect to the SQLite database
@@ -19,8 +20,13 @@ def check_db_content(db_path):
             print(row)
         print("\n")
 
+    exp_data = pd.read_sql_query(f"SELECT * FROM {tables[-1][0]}", conn)
+    print(exp_data.dropna(subset=['instruction_timestamp']))
+    
     # Close the connection
     conn.close()
+
+
 
 if __name__ == "__main__":
     db_path = 'db.sqlite3'
