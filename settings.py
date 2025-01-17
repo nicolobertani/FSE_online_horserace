@@ -26,8 +26,8 @@ ROOMS = [
         display_name='FSE_test',
     ),
     dict(
-        name='FSE_test-prolific',
-        display_name='FSE_test-prolific',
+        name='FSE_test_prolific',
+        display_name='FSE_test_prolific',
     ),
     dict(
         name='Prolific',
