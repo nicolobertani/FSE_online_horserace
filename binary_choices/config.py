@@ -38,6 +38,6 @@ class Constants(BaseConstants):
     # if <results = True>, a separate page containing all relevant information is displayed after finishing the task
     # if <results = False>, the template "Decision.html" will not be rendered
     results = True
-    completionlink = 'https://app.prolific.com/submissions/complete?cc=C1ML7VWD'
+    completionlink = 'https://app.prolific.com/submissions/complete?cc=C15D3WQ8'
 
 
