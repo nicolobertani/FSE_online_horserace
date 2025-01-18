@@ -96,14 +96,15 @@
                 
                 <div>
                     {% if winning_s == 0 %}
-                        As indicated above, you decided for the lottery in this choice.
-                        <br/>
-                        For the lottery, one of the two possible outcomes has been randomly drawns using a computer simulation with the corresponding probabilities.
-                        <br/>
-                        The outcome of the lottery was {{ extra_payoff }}.
-                        
+                        <p>
+                            As indicated above, you opted for the lottery in this choice.
+                        </p>
+                        <p>
+                            One of the two outcomes of the lottery has been randomly drawn using a computer simulation with the corresponding probabilities.
+                            The outcome of this draw was {{ extra_payoff }}.
+                        </p>
                     {% else %}
-                        As indicated above, you decided for the sure amount in this choice.
+                        As indicated above, you opted for the sure amount in this choice.
                     {% endif %}
                 </div>
                 
@@ -113,7 +114,8 @@
                 {% endblocktrans %}
                 
                 {% endif %}
-            {% endif %}
+            </div>
+        {% endif %}
 
             <br/>
             <div class="card info">
@@ -122,7 +124,6 @@
                 </p>
                     To confirm the completion of the experiment, please click this link: <a href="{{ Constants.completionlink }}">{{ Constants.completionlink }}</a>
             </div>
-        </div>
     </div>
 
 {% endblock %}
