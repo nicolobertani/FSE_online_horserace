@@ -183,8 +183,7 @@ class Results(Page):
 
         self.player.end_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # if self.player.participant.vars['winning_participant']:
-        if True:
+        if self.player.participant.vars['winning_participant']:
 
             self.player.random_draw = random.randrange(len(self.player.in_all_rounds()))
             self.player.winning_choice = self.player.random_draw + 1
@@ -207,8 +206,7 @@ class Results(Page):
         vars = vars_for_all_templates(self)
         vars.update({
             'real_incentives' : real_incentives,
-            # 'is_winner' : self.player.participant.vars['winning_participant'],
-            'is_winner' : True,
+            'is_winner' : self.player.participant.vars['winning_participant'],
             'winning_s' : winning_s,
             'x_prob': f"{winning_p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'y_prob' : f"{(1 - winning_p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",

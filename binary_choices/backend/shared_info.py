@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-real_incentives = False
+real_incentives = True
 
 shared_info = {
     "x" : 18,
@@ -28,7 +28,7 @@ shared_info.update({
 })
 
 currency = "$"
-fixed_payment = "3"
+fixed_payment = "2"
 share_winners = 1/30
 
 # Condiational instructions
@@ -39,8 +39,18 @@ if real_incentives:
         If you are selected, one of your choices from the experiment will be randomly picked, and the associated reward will be added to your payment.
         If the chosen reward is a lottery, the bonus payment will be determined by simulating the outcome of that lottery.
         """
+    instructions_reminder = ["""
+    The previous question was just for practice.
+    The experiment will now start.
+    """,
+    "All choices you will make from now could be selected to be added to your final payment."
+    ]
 else: 
     payment_info = f"For participating in this experiment, you will receive a fixed payment of {currency}{fixed_payment}."
+    instructions_reminder = ["""
+    The previous question was just for practice.
+    The experiment will now start.
+    """]
 
 # Set question text
 experiment_text = {
@@ -69,12 +79,7 @@ experiment_text = {
         "Press the button below to proceed to the practice question."
     ],
     
-    "instructions_reminder" : ["""
-    The previous question was just for practice.
-    The experiment will now start.
-    """,
-    "All choices you will make from now could be selected to be added to your final payment."
-    ], # type: ignore
+    "instructions_reminder" : instructions_reminder, # type: ignore
     
     "comp_instructions" : "Please read the instructions carefully and answer the question below.",
 
