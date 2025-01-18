@@ -188,6 +188,7 @@ class Results(Page):
             'real_incentives' : real_incentives,
             'is_winner' : self.player.participant.vars['winning_participant'],
         })
+        self.player.winning_participant = self.player.participant.vars['winning_participant']
 
         if self.player.participant.vars['winning_participant']:
 
