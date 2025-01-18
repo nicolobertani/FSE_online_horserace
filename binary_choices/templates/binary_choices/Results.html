@@ -18,11 +18,9 @@
                 <div class="card info">
                     {% blocktrans trimmed with fixed_payment=fixed_payment %}
                     <p>
-                        Unfortunately, you were not selected for the bonus payment this time.
+                        You were not selected for the bonus payment this time.
                     </p>
-                    <p>
-                        However, you will receive a participation fee of {{ fixed_payment }}.
-                    </p>
+                    You will receive the participation fee of {{ fixed_payment }}.
                     {% endblocktrans %}
                 </div>
 
@@ -95,7 +93,7 @@
             <!-- Payoff Information -->
             <!-- ------------------------------------------------------------------------------------------------------- -->
             <div class="card info">
-
+                
                 <div>
                     {% if winning_s == 0 %}
                         As indicated above, you decided for the lottery in this choice.
@@ -103,12 +101,12 @@
                         For the lottery, one of the two possible outcomes has been randomly drawns using a computer simulation with the corresponding probabilities.
                         <br/>
                         The outcome of the lottery was {{ extra_payoff }}.
-
+                        
                     {% else %}
                         As indicated above, you decided for the sure amount in this choice.
                     {% endif %}
                 </div>
-
+                
                 <br/>
                 {% blocktrans trimmed %}
                     Therefore, for your participation you will receive a participation fee of {{ fixed_payment }} plus a bonus payment equal to {{ extra_payoff }}.
@@ -116,11 +114,14 @@
                 
                 {% endif %}
             {% endif %}
-            <p>
-                Thank you for participating in this experiment.
-            </p>
-                To confirm the completion of the experiment, please click this link: <a href="{{ Constants.completionlink }}">{{ Constants.completionlink }}</a>
 
+            <br/>
+            <div class="card info">
+                <p>
+                    Thank you for participating in this experiment.
+                </p>
+                    To confirm the completion of the experiment, please click this link: <a href="{{ Constants.completionlink }}">{{ Constants.completionlink }}</a>
+            </div>
         </div>
     </div>
 

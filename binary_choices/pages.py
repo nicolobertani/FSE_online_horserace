@@ -183,6 +183,12 @@ class Results(Page):
 
         self.player.end_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+        vars = vars_for_all_templates(self)
+        vars.update({
+            'real_incentives' : real_incentives,
+            'is_winner' : self.player.participant.vars['winning_participant'],
+        })
+
         if self.player.participant.vars['winning_participant']:
 
             self.player.random_draw = random.randrange(len(self.player.in_all_rounds()))
@@ -203,16 +209,24 @@ class Results(Page):
             
             self.player.extra_payoff = extra_payoff
                 
-        vars = vars_for_all_templates(self)
-        vars.update({
-            'real_incentives' : real_incentives,
-            'is_winner' : self.player.participant.vars['winning_participant'],
-            'winning_s' : winning_s,
-            'x_prob': f"{winning_p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
-            'y_prob' : f"{(1 - winning_p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
-            'z_str': f"{winning_z:.2f}".rstrip('0').rstrip('.'),
-            'extra_payoff' : extra_payoff,
-        })
+            vars.update({
+                'winning_s' : winning_s,
+                'x_prob': f"{winning_p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
+                'y_prob' : f"{(1 - winning_p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+                'z_str': f"{winning_z:.2f}".rstrip('0').rstrip('.'),
+                'extra_payoff' : extra_payoff,
+            })
+
+        else:
+            
+            vars.update({
+                'winning_s' : False,
+                'x_prob': False,
+                'y_prob' : False,
+                'z_str': False,
+                'extra_payoff' : False,
+            })
+
         return vars
 
 
