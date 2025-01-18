@@ -34,8 +34,14 @@ ROOMS = [
         display_name='bisection_test_prolific',
     ),
     dict(
-        name='Prolific',
-        display_name='Prolific',
+        name='FSE_prolific',
+        display_name='FSE_prolific',
+        # participant_label_file='_rooms/binary_choices.txt',
+        # use_secure_urls=True,
+    ),
+    dict(
+        name='bisection_prolific',
+        display_name='bisection_prolific',
         # participant_label_file='_rooms/binary_choices.txt',
         # use_secure_urls=True,
     ),
