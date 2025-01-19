@@ -30,8 +30,8 @@ class Subsession(BaseSubsession):
             for i, p in enumerate(self.get_players()):
                 
                 p.participant.vars.update({
-                    'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
-                    # 'player_model' : bisection_engine.Bisection()
+                    # 'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
+                    'player_model' : bisection_engine.Bisection()
                 })
                 # if i % 2 == 0:
                 #     p.participant.vars.update({
