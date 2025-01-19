@@ -157,7 +157,7 @@ class FSE:
 
         # calculate max difference based on updated bounds
         self.D = np.round(self.upper_bound - self.lower_bound, 6)
-        self.epsilon = np.round(np.max(self.D), 4)
+        self.epsilon = np.max(self.D)
 
         self.iteration += 1
         if self.epsilon > .1:
