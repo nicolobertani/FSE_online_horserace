@@ -15,14 +15,15 @@
     <div class="wrapper">
         {% if real_incentives %}
             {% if not is_winner %}
-                <div class="card info">
-                    {% blocktrans trimmed with fixed_payment=fixed_payment %}
-                    <p>
-                        You were not selected for the bonus payment this time.
-                    </p>
-                    You will receive the participation fee of {{ fixed_payment }}.
-                    {% endblocktrans %}
-                </div>
+
+            <div class="card info">
+                {% blocktrans trimmed with fixed_payment=fixed_payment %}
+                <p>
+                    You were not selected for the bonus payment this time.
+                </p>
+                You will receive the participation fee of {{ fixed_payment }}.
+                {% endblocktrans %}
+            </div>
 
             {% else %}
                 
@@ -114,16 +115,16 @@
                 {% endblocktrans %}
                 
                 {% endif %}
-            </div>
-        {% endif %}
-
-            <br/>
-            <div class="card info">
-                <p>
-                    Thank you for participating in this experiment.
-                </p>
+                {% endif %}
+                
+                <br/>
+                <div class="card info">
+                    <p>
+                        Thank you for participating in this experiment.
+                    </p>
                     To confirm the completion of the experiment, please click this link: <a href="{{ Constants.completionlink }}">{{ Constants.completionlink }}</a>
-            </div>
+                </div>
+        </div>
     </div>
 
 {% endblock %}
