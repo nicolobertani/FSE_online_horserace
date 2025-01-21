@@ -105,4 +105,4 @@ class Player(BasePlayer):
     random_draw = models.IntegerField()
 
     # Bayesian info
-    num_questions = models.IntegerField()
+    num_Bayesian_questions = models.IntegerField()
