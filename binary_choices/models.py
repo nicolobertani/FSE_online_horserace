@@ -1,4 +1,6 @@
 import random
+import numpy as np
+import pandas as pd
 from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
@@ -27,11 +29,20 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         
         if self.round_number == 1:
+
+            q_df = pd.read_csv('binary_choices/backend/FSE_table.csv')
+
             for i, p in enumerate(self.get_players()):
+                
+                number_of_questions = np.random.choice(q_df['n.questions'], size = 1, p=q_df['share'])[0]
                 
                 p.participant.vars.update({
                     # 'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
-                    'player_model' : bisection_engine.Bisection()
+                    # 'player_model' : bisection_engine.Bisection()
+                    'player_model' : Bayesian_engine.BayesianLR(
+                        sequence_file="binary_choices/backend/question_list.json",
+                        n_train_iterations=number_of_questions
+                    )
                 })
                 # if i % 2 == 0:
                 #     p.participant.vars.update({
@@ -92,3 +103,6 @@ class Player(BasePlayer):
     winning_choice = models.IntegerField()
     extra_payoff = models.StringField()
     random_draw = models.IntegerField()
+
+    # Bayesian info
+    num_questions = models.IntegerField()

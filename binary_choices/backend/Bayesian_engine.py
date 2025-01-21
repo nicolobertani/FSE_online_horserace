@@ -19,8 +19,8 @@ class BayesianLR:
     """
     
     def __init__(self, 
-                 sequence_file = "backend/question_list.json",
-                 n_train_iterations = 13,
+                 sequence_file,
+                 n_train_iterations,
                  ):
         """
         Initiates the attributes
@@ -29,14 +29,13 @@ class BayesianLR:
         self.iteration = 0
         self.n_train_iterations = n_train_iterations
         self.finished = False
+        self.last_q = False
 
         # Load the question list
         with open(sequence_file, 'r') as json_file:
             self.question_list = json.load(json_file)
 
         # first question
-        print(type(self.question_list))
-        print(self.question_list["1"])
         self.p_x = self.question_list["1"][0]['p_x'][0]
         self.z = self.question_list["1"][0]['w_p'][0] * (shared_info["x"] - shared_info["y"]) + shared_info["y"]
 
@@ -65,6 +64,10 @@ class BayesianLR:
         if self.iteration == (self.n_train_iterations + shared_info['number_test_questions'] - 1):
             self.finished = True
 
+    def check_last_q(self):
+        if self.iteration >= (self.n_train_iterations + shared_info['number_test_questions'] - 2):
+            self.last_q = True
+
     def get_finished(self):
         return self.finished
 
@@ -82,7 +85,6 @@ class BayesianLR:
         data_next = self.question_list[str(len(answer_vec) + 1)]
         which_answer_seq = np.where([np.all(np.array(sub_dict['s']) == np.array(answer_vec)) for sub_dict in data_next])[0]
         next_q = data_next[int(which_answer_seq[0])]
-        print(next_q)
 
         return next_q['p_x'], next_q['w_p']
 
@@ -148,8 +150,10 @@ class BayesianLR:
 
     def next_question(self, answer):
         self.check_finished()
+        self.check_last_q()
     
         if self.iteration < self.n_train_iterations:
-            return self.next_question_train(answer)
-        elif self.iteration < self.n_train_iterations + shared_info['number_test_questions']:
-            return self.next_question_test(answer)
+            return self.next_question_train(answer), self.last_q
+        elif not self.finished:
+            return self.next_question_test(answer), self.last_q
+        
