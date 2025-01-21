@@ -35,7 +35,7 @@ class Instructions(Page):
     def vars_for_template(self):
         
         self.player.instruction_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.player.num_Bayesian_questions = int(self.player.participant.vars['player_model'].n_train_iterations)
+        # self.player.num_Bayesian_questions = int(self.player.participant.vars['player_model'].n_train_iterations)
         
         vars = vars_for_all_templates(self)
 
