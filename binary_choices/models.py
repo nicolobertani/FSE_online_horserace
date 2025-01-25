@@ -30,19 +30,19 @@ class Subsession(BaseSubsession):
         
         if self.round_number == 1:
 
-            q_df = pd.read_csv('binary_choices/backend/FSE_table.csv')
+            # q_df = pd.read_csv('binary_choices/backend/FSE_table.csv')
 
             for i, p in enumerate(self.get_players()):
                 
-                number_of_questions = np.random.choice(q_df['n.questions'], size = 1, p=q_df['share'])[0]
+                # number_of_questions = np.random.choice(q_df['n.questions'], size = 1, p=q_df['share'])[0]
                 
                 p.participant.vars.update({
-                    # 'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
+                    'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
                     # 'player_model' : bisection_engine.Bisection()
-                    'player_model' : Bayesian_engine.BayesianLR(
-                        sequence_file="binary_choices/backend/question_list.json",
-                        n_train_iterations=number_of_questions
-                    )
+                    # 'player_model' : Bayesian_engine.BayesianLR(
+                    #     sequence_file="binary_choices/backend/question_list.json",
+                    #     n_train_iterations=number_of_questions
+                    # )
                 })
                 # if i % 2 == 0:
                 #     p.participant.vars.update({

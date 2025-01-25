@@ -40,5 +40,3 @@ class Constants(BaseConstants):
     # if <results = False>, the template "Decision.html" will not be rendered
     results = True
     completionlink = 'https://app.prolific.com/submissions/complete?cc=C15D3WQ8'
-
-

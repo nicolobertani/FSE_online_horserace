@@ -21,32 +21,32 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 ROOMS = [
-    dict(
-        name='FSE_test',
-        display_name='FSE_test',
-    ),
+    # dict(
+    #     name='FSE_test',
+    #     display_name='FSE_test',
+    # ),
     dict(
         name='FSE_test_prolific',
         display_name='FSE_test_prolific',
     ),
-    dict(
-        name='bisection_test_prolific',
-        display_name='bisection_test_prolific',
-    ),
-    dict(
-        name='Bayesian_test_prolific',
-        display_name='Bayesian_test_prolific',
-    ),
+    # dict(
+    #     name='bisection_test_prolific',
+    #     display_name='bisection_test_prolific',
+    # ),
+    # dict(
+    #     name='Bayesian_test_prolific',
+    #     display_name='Bayesian_test_prolific',
+    # ),
     dict(
         name='FSE_prolific',
         display_name='FSE_prolific',
         # participant_label_file='_rooms/binary_choices.txt',
         # use_secure_urls=True,
     ),
-    dict(
-        name='bisection_prolific',
-        display_name='bisection_prolific',
-    ),
+    # dict(
+    #     name='bisection_prolific',
+    #     display_name='bisection_prolific',
+    # ),
     dict(
         name='Bayesian_prolific',
         display_name='Bayesian_prolific',
