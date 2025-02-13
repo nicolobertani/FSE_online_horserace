@@ -8,4 +8,4 @@ db.sqlite3
 *.sh
 !heroku_deployment.sh
 check_latest_dump.py
-latest.dump
+*.dump

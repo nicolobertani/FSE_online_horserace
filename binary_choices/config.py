@@ -10,8 +10,7 @@ class Constants(BaseConstants):
 
     name_in_url = 'binary_choices'
     players_per_group = None
-    # num_rounds = max([31, len(shared_info['set_p_bisection']) * shared_info["number_bisection_steps"] + shared_info['number_test_questions'] + 1])
-    num_rounds = 20
+    num_rounds = max([31, len(shared_info['set_p_bisection']) * shared_info["number_bisection_steps"] + shared_info['number_test_questions'] + 1])
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # --- Overall Settings and Appearance --- #
