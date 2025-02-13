@@ -9,3 +9,4 @@ db.sqlite3
 !heroku_deployment.sh
 check_latest_dump.py
 *.dump
+*.sql
