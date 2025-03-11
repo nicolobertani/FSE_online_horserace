@@ -1,0 +1,147 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{% block styles %}
+    <link href="{% static 'binary_choices/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+    Question {{ page }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="wrapper">
+
+        <form method="post">
+            <!-- Table - Lottery Decisions (Option A/B) -->
+            <div class="card">
+                <div class="card-header">
+                    {{ question_header }}
+                </div>
+                <table class="table">
+                    {% if lottery_first %}
+                        <tr>
+                            <th>{% trans "Option A:" %}</th>
+                            <td>
+                                {% blocktrans trimmed %}
+                                <p>
+                                    A lottery where you can either receive:
+                                </p>
+                                <p>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% endif %}
+                                    <br>
+                                    &emsp;or
+                                    <br>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                    {% endif %}
+                                </p>
+                                {% endblocktrans %}
+                            </td>
+                            <td>
+                                <input type="radio" name="choice" value="lottery" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Option B:" %}</th>
+                            <td>
+                                {% blocktrans trimmed %}
+                                <p>
+                                    A lottery where you can either receive:
+                                </p>
+                                <p>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% endif %}
+                                    <br>
+                                    &emsp;or
+                                    <br>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                    {% endif %}
+                                </p>
+                                {% endblocktrans %}
+                            </td>
+                            <td>
+                                    <input type="radio" name="choice" value="sure_amount" required>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <th>{% trans "Option A:" %}</th>
+                            <td>
+                                {% blocktrans trimmed %}
+                                <p>
+                                    A lottery where you can either receive:
+                                </p>
+                                <p>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% endif %}
+                                    <br>
+                                    &emsp;or
+                                    <br>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                    {% endif %}
+                                </p>
+                                {% endblocktrans %}
+                            </td>
+                            <td>
+                                <input type="radio" name="choice" value="sure_amount" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{% trans "Option B:" %}</th>
+                            <td>
+                                {% blocktrans trimmed %}
+                                <p>
+                                    A lottery where you can either receive:
+                                </p>
+                                <p>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% endif %}
+                                    <br>
+                                    &emsp;or
+                                    <br>
+                                    {% if large_opt_first %}
+                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                    {% else %}
+                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                    {% endif %}
+                                </p>
+                                {% endblocktrans %}
+                            </td>
+                            <td>
+                                <input type="radio" name="choice" value="lottery" required>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+
+            {% next_button %}
+        </form>
+
+    </div>
+
+{% endblock %}
