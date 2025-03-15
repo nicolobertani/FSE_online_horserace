@@ -10,12 +10,14 @@ from binary_choices.backend.shared_info import *
 import binary_choices.backend.bisection_engine as bisection_engine
 import binary_choices.backend.FSE_engine as FSE_engine
 import binary_choices.backend.Bayesian_engine as Bayesian_engine
+import binary_choices.backend.TO_engine as TO_engine
 
 
 author = 'Nicolò Bertani'
 
 doc = """
-This app sets up a binary choice task to compare FSE, standard bisection, and Bayesian elicitation.
+This app sets up a binary choice task to compare 
+FSE, standard bisection, Bayesian elicitation, and trade-off method plus FSE.
 """
 
 
@@ -30,29 +32,34 @@ class Subsession(BaseSubsession):
         
         if self.round_number == 1:
 
-            q_df = pd.read_csv('binary_choices/backend/FSE_table.csv')
+            if Constants.method == 'Bayesian':
+                q_df = pd.read_csv('binary_choices/backend/FSE_table.csv')
 
             for i, p in enumerate(self.get_players()):
                 
-                number_of_questions = np.random.choice(q_df['n.questions'], size = 1, p=q_df['share'])[0]
-                
-                p.participant.vars.update({
-                    # 'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
-                    # 'player_model' : bisection_engine.Bisection()
-                    'player_model' : Bayesian_engine.BayesianLR(
-                        sequence_file="binary_choices/backend/question_list.json",
-                        n_train_iterations=number_of_questions
+                if Constants.method == 'FSE':
+                    p.participant.vars.update({
+                        'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"])
+                    })
+                elif Constants.method == 'Bayesian':
+                    number_of_questions = np.random.choice(q_df['n.questions'], size = 1, p=q_df['share'])[0]
+                    p.participant.vars.update({
+                        'player_model' : Bayesian_engine.BayesianLR(
+                            sequence_file="binary_choices/backend/question_list.json",
+                            n_train_iterations=number_of_questions
                     )
-                })
-                # if i % 2 == 0:
-                #     p.participant.vars.update({
-                #         'player_model' : bisection_engine.Bisection(),
-                #     })
-                # else:
-                #     p.participant.vars.update({
-                #         'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
-                #     })
-
+                    })
+                elif Constants.method == 'bisection':
+                    p.participant.vars.update({
+                        'player_model' : bisection_engine.Bisection()
+                    })
+                elif Constants.method == 'TO':
+                    p.participant.vars.update({
+                        'player_model' : FSE_engine.FSE(set_z=shared_info["set_z"]),
+                        'do_TO' : True,
+                        'TO_model' : TO_engine.TO()
+                    })
+                
                 p.participant.vars.update({
                     'experimental_design' : [i], #incomplete
                     'winning_participant' : random.random() < share_winners,
@@ -86,6 +93,13 @@ class Player(BasePlayer):
     comp_q2 = models.StringField()
 
     ### main
+    # TO
+    small_amount = models.FloatField()
+    large_amount = models.FloatField()
+    x_0 = models.FloatField()
+    x_1 = models.FloatField()    
+
+    # pwf
     p_x = models.FloatField()
     z = models.FloatField()
     choice = models.StringField()
