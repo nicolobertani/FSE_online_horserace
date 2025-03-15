@@ -102,11 +102,11 @@ class ComprehensionQuestion(Page):
 
         vars = vars_for_all_templates(self)
         vars.update({
-            'comp_q1_text': experiment_text["comp_q1"].format(practice_lottery_text.rstrip('.').replace('\n', ' ')),
+            'comp_q1_text' : experiment_text["comp_q1"].format(practice_lottery_text.rstrip('.').replace('\n', ' ')),
             'comp_q1_opt1' : f"{experiment_text['amount_currency']}{shared_info['practice_z']}".rjust(5),
             'comp_q1_opt2' : f"{experiment_text['amount_currency']}{shared_info['x']}".rjust(5),
             'comp_q1_opt3' : f"{experiment_text['amount_currency']}{shared_info['y']}".rjust(5),
-            'comp_q2_text': experiment_text["comp_q2"].format(practice_sure_text.rstrip('.').replace('\n', ' ')),
+            'comp_q2_text' : experiment_text["comp_q2"].format(practice_sure_text.rstrip('.').replace('\n', ' ')),
             'comp_q2_opt1' : f"{experiment_text['amount_currency']}{shared_info['practice_z']}".rjust(5),
             'comp_q2_opt2' : f"{experiment_text['amount_currency']}{shared_info['x']}".rjust(5),
             'comp_q2_opt3' : f"{experiment_text['amount_currency']}{shared_info['y']}".rjust(5),
@@ -127,6 +127,51 @@ class ExpIntro(Page):
 
         return vars_for_all_templates(self)
 
+
+
+# ******************************************************************************************************************** #
+# *** PAGE TO DECISION *** #
+# ******************************************************************************************************************** #
+class TO_Decision(Page):
+
+    def is_displayed(self):
+        return self.player.participant.vars['do_TO'] == True
+
+    # form model and form fields
+    # ----------------------------------------------------------------------------------------------------------------
+    form_model = 'player'
+    form_fields = ['choice']    
+
+    # variables for template
+    # ----------------------------------------------------------------------------------------------------------------
+    def vars_for_template(self):
+
+        self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if self.subsession.round_number == 1:
+            self.player.p_x = float(self.player.participant.vars['TO_model'].p_x)
+            self.player.small_amount = float(self.player.participant.vars['TO_model'].r)
+            self.player.large_amount = float(self.player.participant.vars['TO_model'].R)
+            self.player.x_0 = float(self.player.participant.vars['TO_model'].x_0)
+            self.player.x_1 = float(self.player.participant.vars['TO_model'].x_1)
+        else:
+            previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'lottery_R'
+            (x_0, x_1), self.player.participant.vars['do_TO'] = self.player.participant.vars['TO_model'].next_question_TO(previous_choice)
+            self.player.x_0 = float(x_0)
+            self.player.x_1 = float(x_1)
+
+        vars = vars_for_all_templates(self)
+        vars.update({
+            'page': self.subsession.round_number,
+            'x_prob': f"{self.player.p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'y_prob' : f"{(1 - self.player.p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
+            'r' : f"{experiment_text['amount_currency']}{self.player.small_amount:.2f}".rstrip('0').rstrip('.'),
+            'R' : f"{experiment_text['amount_currency']}{self.player.large_amount:.2f}".rstrip('0').rstrip('.'),
+            'x_0': f"{experiment_text['amount_currency']}{self.player.x_0:.2f}".rstrip('0').rstrip('.'),
+            'x_1': f"{experiment_text['amount_currency']}{self.player.x_1:.2f}".rstrip('0').rstrip('.'),
+            'lottery_first' : random.choice([True, False]),
+            'large_opt_first' : self.player.participant.vars['large_opt_first'],
+        })
+        return vars
 
 
 # ******************************************************************************************************************** #
@@ -235,7 +280,7 @@ class Results(Page):
 # ******************************************************************************************************************** #
 # *** PAGE SEQUENCE *** #
 # ******************************************************************************************************************** #
-page_sequence = [Practice, ComprehensionQuestion, ExpIntro, Decision]
+page_sequence = [Practice, ComprehensionQuestion, ExpIntro, TO_Decision, Decision]
 
 if Constants.instructions:
     page_sequence.insert(0, Instructions)
