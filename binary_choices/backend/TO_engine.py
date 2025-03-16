@@ -23,7 +23,8 @@ class TO:
                  TO_r = 15,
                  TO_R = 18,
                  TO_x_0 = 2,
-                 TO_x_1 = 8
+                 TO_x_1 = 8,
+                 TO_stepsize = 1
                  ):
         """
         Initiates the attributes
@@ -33,6 +34,7 @@ class TO:
         self.TO_x_0_count = 1
         self.last_before_change = False
         self.finished = False
+        self.TO_stepsize = TO_stepsize
 
         starting_data = [[self.iteration + 1], [TO_p_x], [TO_r], [TO_R], [TO_x_0], [TO_x_1], [None], [None]]
         colnames = ['q_n', 'p_x', 'r', 'R', 'x_0', 'x_1', 's', 's_tilde']
@@ -82,16 +84,16 @@ class TO:
             
             if self.last_before_change:
                 if answer: # respondent chose the lottery with x_0
-                    self.x_0 = self.x_1 + .5
+                    self.x_0 = self.x_1 + self.TO_stepsize / 2
                 else: # respondent chose the lottery with x_0
-                    self.x_0 = self.x_1 - .5
+                    self.x_0 = self.x_1 - self.TO_stepsize / 2
             else:
                 if answer: # respondent chose the lottery with x_0
-                    self.x_0 = self.x_1 + 1
+                    self.x_0 = self.x_1 + self.TO_stepsize
                 else: # respondent chose the lottery with x_0
-                    self.x_0 = self.x_1 - 1
+                    self.x_0 = self.x_1 - self.TO_stepsize
 
-            self.x_1 = self.x_0 + 2 * self.R - 2 * self.r
+            self.x_1 = self.x_0 + 2 * self.R - 2 * self.r # match expected value
             
             self.TO_question_iteration = 0
             self.last_before_change = False
@@ -107,9 +109,9 @@ class TO:
                 print('first question', self.TO_question_iteration, self.TO_x_0_count)
 
                 if answer: # respondent chose the lottery with x_0
-                    self.x_1 += 1
+                    self.x_1 += self.TO_stepsize
                 else: # respondent chose the lottery with x_0
-                    self.x_1 -= 1
+                    self.x_1 -= self.TO_stepsize
 
             else:
                 if self.TO_data.loc[self.iteration - 1, "s"] == int(answer): # respondent keeps on preferring the same lottery
@@ -117,9 +119,9 @@ class TO:
                     print('continue', self.TO_question_iteration, self.TO_x_0_count)
 
                     if answer: # respondent chose the lottery with x_0
-                        self.x_1 += 1
+                        self.x_1 += self.TO_stepsize
                     else: # respondent chose the lottery with x_0
-                        self.x_1 -= 1
+                        self.x_1 -= self.TO_stepsize
 
 
                 else: # respondent just changed preference to the other same lottery
@@ -131,9 +133,9 @@ class TO:
                         self.do_TO = False
                         
                     if answer: # respondent chose the lottery with x_0
-                        self.x_1 += .5
+                        self.x_1 += self.TO_stepsize / 2
                     else: # respondent chose the lottery with x_0
-                        self.x_1 -= .5
+                        self.x_1 -= self.TO_stepsize / 2
 
             self.TO_question_iteration += 1
 
