@@ -76,44 +76,67 @@ class TO:
         self.TO_data.loc[self.iteration, "timestamp"] = datetime.datetime.now()
 
         # update x_0 if changed preference or after 5 questions
-        if self.last_before_change or (self.TO_question_iteration == 5):
+        if self.last_before_change or (self.TO_question_iteration >= 4):
+            
+            print('new', self.TO_question_iteration, self.TO_x_0_count)
+            
+            if self.last_before_change:
+                if answer: # respondent chose the lottery with x_0
+                    self.x_0 = self.x_1 + .5
+                else: # respondent chose the lottery with x_0
+                    self.x_0 = self.x_1 - .5
+            else:
+                if answer: # respondent chose the lottery with x_0
+                    self.x_0 = self.x_1 + 1
+                else: # respondent chose the lottery with x_0
+                    self.x_0 = self.x_1 - 1
+
+            self.x_1 = self.x_0 + 2 * self.R - 2 * self.r
+            
             self.TO_question_iteration = 0
             self.last_before_change = False
             self.TO_x_0_count += 1
-            
-            if answer: # respondent chose the lottery with x_0
-                self.x_0 = self.x_1 + .5
-            else: # respondent chose the lottery with x_0
-                self.x_0 = self.x_1 - .5
-            
-            self.x_1 = self.x_0 + 2 * self.R - 2 * self.r
+            if self.TO_x_0_count > 3:
+                self.do_TO = False
 
-
-        # update outcomes
-        if self.TO_question_iteration == 0:
-            if answer: # respondent chose the lottery with x_0
-                self.x_1 += 1
-            else: # respondent chose the lottery with x_0
-                self.x_1 -= 1
 
         else:
-            if self.TO_data.loc[self.iteration - 1, "s"] == int(answer): # respondent keeps on preferring the same lottery
+            # update outcomes
+            if self.TO_question_iteration == 0:
+                
+                print('first question', self.TO_question_iteration, self.TO_x_0_count)
+
                 if answer: # respondent chose the lottery with x_0
                     self.x_1 += 1
                 else: # respondent chose the lottery with x_0
                     self.x_1 -= 1
 
-            else: # respondent just changed preference to the other same lottery
-                self.last_before_change = True
-                if self.TO_x_0_count == 3:
-                    self.do_TO = False
-                    
-                if answer: # respondent chose the lottery with x_0
-                    self.x_1 += .5
-                else: # respondent chose the lottery with x_0
-                    self.x_1 -= .5
+            else:
+                if self.TO_data.loc[self.iteration - 1, "s"] == int(answer): # respondent keeps on preferring the same lottery
 
-        self.TO_question_iteration += 1
+                    print('continue', self.TO_question_iteration, self.TO_x_0_count)
+
+                    if answer: # respondent chose the lottery with x_0
+                        self.x_1 += 1
+                    else: # respondent chose the lottery with x_0
+                        self.x_1 -= 1
+
+
+                else: # respondent just changed preference to the other same lottery
+                    
+                    print('last', self.TO_question_iteration, self.TO_x_0_count)
+
+                    self.last_before_change = True
+                    if self.TO_x_0_count >= 3:
+                        self.do_TO = False
+                        
+                    if answer: # respondent chose the lottery with x_0
+                        self.x_1 += .5
+                    else: # respondent chose the lottery with x_0
+                        self.x_1 -= .5
+
+            self.TO_question_iteration += 1
+
         self.iteration += 1
 
         # record the values
