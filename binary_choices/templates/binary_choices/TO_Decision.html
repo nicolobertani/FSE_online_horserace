@@ -21,7 +21,7 @@
                     {{ question_header }}
                 </div>
                 <table class="table">
-                    {% if lottery_first %}
+                    {% if large_opt_first %}
                         <tr>
                             <th>{% trans "Option A:" %}</th>
                             <td>
@@ -31,17 +31,17 @@
                                 </p>
                                 <p>
                                     {% if large_opt_first %}
-                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ R }} with {{ x_prob }} probability
                                     {% else %}
-                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_0 }}</strong> with {{ y_prob }} probability
                                     {% endif %}
                                     <br>
                                     &emsp;or
                                     <br>
                                     {% if large_opt_first %}
-                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_0 }}</strong> with {{ y_prob }} probability
                                     {% else %}
-                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ R }} with {{ x_prob }} probability
                                     {% endif %}
                                 </p>
                                 {% endblocktrans %}
@@ -59,23 +59,23 @@
                                 </p>
                                 <p>
                                     {% if large_opt_first %}
-                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ r }} with {{ x_prob }} probability
                                     {% else %}
-                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_1 }}</strong> with {{ y_prob }} probability
                                     {% endif %}
                                     <br>
                                     &emsp;or
                                     <br>
                                     {% if large_opt_first %}
-                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_1 }}</strong> with {{ y_prob }} probability
                                     {% else %}
-                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ r }} with {{ x_prob }} probability
                                     {% endif %}
                                 </p>
                                 {% endblocktrans %}
                             </td>
                             <td>
-                                    <input type="radio" name="choice" value="lottery_r" required>
+                                <input type="radio" name="choice" value="lottery_r" required>
                             </td>
                         </tr>
                     {% else %}
@@ -88,17 +88,17 @@
                                 </p>
                                 <p>
                                     {% if large_opt_first %}
-                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ r }} with {{ x_prob }} probability
                                     {% else %}
-                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_1 }}</strong> with {{ y_prob }} probability
                                     {% endif %}
                                     <br>
                                     &emsp;or
                                     <br>
                                     {% if large_opt_first %}
-                                        &emsp;{{ x_1 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_1 }}</strong> with {{ y_prob }} probability
                                     {% else %}
-                                        &emsp;{{ r }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ r }} with {{ x_prob }} probability
                                     {% endif %}
                                 </p>
                                 {% endblocktrans %}
@@ -116,17 +116,17 @@
                                 </p>
                                 <p>
                                     {% if large_opt_first %}
-                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ R }} with {{ x_prob }} probability
                                     {% else %}
-                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_0 }}</strong> with {{ y_prob }} probability
                                     {% endif %}
                                     <br>
                                     &emsp;or
                                     <br>
                                     {% if large_opt_first %}
-                                        &emsp;{{ x_0 }} with <strong>{{ y_prob }}</strong> probability
+                                        &emsp;<strong>{{ x_0 }}</strong> with {{ y_prob }} probability
                                     {% else %}
-                                        &emsp;{{ R }} with <strong>{{ x_prob }}</strong> probability
+                                        &emsp;{{ R }} with {{ x_prob }} probability
                                     {% endif %}
                                 </p>
                                 {% endblocktrans %}
