@@ -147,10 +147,11 @@ class TO_Decision(Page):
     def vars_for_template(self):
 
         self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.player.p_x = float(self.player.participant.vars['TO_model'].p_x)
+        self.player.small_amount = float(self.player.participant.vars['TO_model'].r)
+        self.player.large_amount = float(self.player.participant.vars['TO_model'].R)
+        
         if self.subsession.round_number == 1:
-            self.player.p_x = float(self.player.participant.vars['TO_model'].p_x)
-            self.player.small_amount = float(self.player.participant.vars['TO_model'].r)
-            self.player.large_amount = float(self.player.participant.vars['TO_model'].R)
             self.player.x_0 = float(self.player.participant.vars['TO_model'].x_0)
             self.player.x_1 = float(self.player.participant.vars['TO_model'].x_1)
         else:
@@ -180,7 +181,7 @@ class TO_Decision(Page):
 class Decision(Page):
 
     def is_displayed(self):
-        return self.player.participant.vars['last_q'] == False
+        return (self.player.participant.vars['do_TO'] == False) and (self.player.participant.vars['last_q'] == False)
 
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
