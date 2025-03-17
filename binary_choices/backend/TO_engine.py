@@ -150,3 +150,31 @@ class TO:
         self.TO_data.loc[self.iteration, "x_1"] = self.x_1
             
         return (self.x_0, self.x_1), self.do_TO
+
+    def next_question(self, answer):
+        out = self.next_question_TO(answer)
+
+        # if out[1] == False:
+            # self.fit_utility()
+
+        return out
+
+    def fit_utility(self):
+        """
+        Fits the utility function at the end of the trade-off questioning
+        """
+        
+        self.iteration = len(self.TO_data) - 2
+        
+        print(self.TO_data)
+        print(self.TO_data.iloc[:-1])
+
+        # # filter out the data
+        # x_0_changes = self.TO_data[self.TO_data['x_0'].diff() != 0]
+        # last_row = self.TO_data.iloc[-1:]
+        # filtered_data = pd.concat([x_0_changes, last_row])
+
+        # print(filtered_data)
+        
+        # return filtered_data
+    

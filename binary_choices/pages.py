@@ -193,18 +193,42 @@ class Decision(Page):
     def vars_for_template(self):
 
         self.player.q_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        if self.subsession.round_number == 1:
-            self.player.z = float(self.player.participant.vars['player_model'].z)
-            self.player.p_x = float(self.player.participant.vars['player_model'].p_x)
+
+        if Constants.method == 'TO':
+            
+            if self.subsession.round_number == (self.player.participant.vars['TO_model'].get_iteration() + 1):
+                
+                previous_choice = self.player.in_round(self.subsession.round_number - 1).TO_choice == 'lottery_R'
+                self.player.participant.vars['TO_model'].next_question(previous_choice)
+                self.player.participant.vars['TO_model'].fit_utility()
+
+                self.player.z = float(self.player.participant.vars['player_model'].z)
+                self.player.p_x = float(self.player.participant.vars['player_model'].p_x)
+            
+            else:
+                previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
+                (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(previous_choice)
+                self.player.z = float(z)
+                self.player.p_x = float(p_x)
+
+            page_number = int(self.player.participant.vars['TO_model'].get_iteration() + self.player.participant.vars['player_model'].get_iteration() + 1)
+
         else:
-            previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
-            (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(previous_choice)
-            self.player.z = float(z)
-            self.player.p_x = float(p_x)
+            if self.subsession.round_number == 1:
+                self.player.z = float(self.player.participant.vars['player_model'].z)
+                self.player.p_x = float(self.player.participant.vars['player_model'].p_x)
+
+            else:
+                previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'sure_amount'
+                (z, p_x), self.player.participant.vars['last_q'] = self.player.participant.vars['player_model'].next_question(previous_choice)
+                self.player.z = float(z)
+                self.player.p_x = float(p_x)
+
+            page_number = self.subsession.round_number 
 
         vars = vars_for_all_templates(self)
         vars.update({
-            'page': self.subsession.round_number,
+            'page': page_number,
             'x_prob': f"{self.player.p_x * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'y_prob' : f"{(1 - self.player.p_x) * 100:.2f}".rstrip('0').rstrip('.') + "%",
             'z_str': f"{experiment_text['amount_currency']}{self.player.z:.2f}".rstrip('0').rstrip('.'),
