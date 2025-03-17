@@ -140,7 +140,7 @@ class TO_Decision(Page):
     # form model and form fields
     # ----------------------------------------------------------------------------------------------------------------
     form_model = 'player'
-    form_fields = ['choice']    
+    form_fields = ['TO_choice']    
 
     # variables for template
     # ----------------------------------------------------------------------------------------------------------------
@@ -155,8 +155,8 @@ class TO_Decision(Page):
             self.player.x_0 = float(self.player.participant.vars['TO_model'].x_0)
             self.player.x_1 = float(self.player.participant.vars['TO_model'].x_1)
         else:
-            previous_choice = self.player.in_round(self.subsession.round_number - 1).choice == 'lottery_R'
-            (x_0, x_1), self.player.participant.vars['do_TO'] = self.player.participant.vars['TO_model'].next_question_TO(previous_choice)
+            previous_choice = self.player.in_round(self.subsession.round_number - 1).TO_choice == 'lottery_R'
+            (x_0, x_1), self.player.participant.vars['do_TO'] = self.player.participant.vars['TO_model'].next_question(previous_choice)
             self.player.x_0 = float(x_0)
             self.player.x_1 = float(x_1)
 

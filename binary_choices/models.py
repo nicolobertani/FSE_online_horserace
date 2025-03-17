@@ -98,6 +98,7 @@ class Player(BasePlayer):
     large_amount = models.FloatField()
     x_0 = models.FloatField()
     x_1 = models.FloatField()    
+    TO_choice = models.StringField()
 
     # pwf
     p_x = models.FloatField()
