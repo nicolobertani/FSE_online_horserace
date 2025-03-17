@@ -78,7 +78,7 @@ class FSE:
         """
         Returns the closest bisection point in the set z
         """
-        distances = np.abs(self.utility_transform(self.set_z) - self.utility_transform(z))
+        distances = np.abs(self.set_z - z)
         closest_indices = np.where(distances == np.min(distances))[0]
         closest_z_values = self.set_z[closest_indices]
         
