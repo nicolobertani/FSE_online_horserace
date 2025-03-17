@@ -198,10 +198,14 @@ class Decision(Page):
             
             if self.subsession.round_number == (self.player.participant.vars['TO_model'].get_iteration() + 1):
                 
+                # save the last choice of the TO part
                 previous_choice = self.player.in_round(self.subsession.round_number - 1).TO_choice == 'lottery_R'
                 self.player.participant.vars['TO_model'].next_question(previous_choice)
-                self.player.participant.vars['TO_model'].fit_utility()
+                # fit and store the utility transformation
+                TO_sequence, u_par = self.player.participant.vars['TO_model'].fit_utility()
+                self.player.participant.vars['player_model'].incorporate_utility_transformation(TO_sequence, u_par)
 
+                # set the first question of the pwf part
                 self.player.z = float(self.player.participant.vars['player_model'].z)
                 self.player.p_x = float(self.player.participant.vars['player_model'].p_x)
             
@@ -310,7 +314,8 @@ class Results(Page):
 # ******************************************************************************************************************** #
 # *** PAGE SEQUENCE *** #
 # ******************************************************************************************************************** #
-page_sequence = [Practice, ComprehensionQuestion, ExpIntro, TO_Decision, Decision]
+# page_sequence = [Practice, ComprehensionQuestion, ExpIntro, TO_Decision, Decision]
+page_sequence = [TO_Decision, Decision]
 
 if Constants.instructions:
     page_sequence.insert(0, Instructions)
