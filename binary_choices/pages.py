@@ -263,7 +263,12 @@ class Results(Page):
 
         if self.player.participant.vars['winning_participant']:
 
-            self.player.random_draw = random.randrange(len(self.player.in_all_rounds()))
+            # only select from pwf rounds
+            if Constants.method == 'TO':
+                self.player.random_draw = random.randrange(len(self.player.in_all_rounds()) - self.player.participant.vars['player_model'].get_iteration(), len(self.player.in_all_rounds()))
+            else:
+                self.player.random_draw = random.randrange(len(self.player.in_all_rounds()))
+            
             self.player.winning_choice = self.player.random_draw + 1
             
             winning_s = self.player.in_round(self.player.random_draw + 1).choice == 'sure_amount'
