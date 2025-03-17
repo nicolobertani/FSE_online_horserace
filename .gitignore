@@ -11,3 +11,4 @@ check_latest_dump.py
 *.dump
 *.dump.*
 *.sql
+check_db_content.py
