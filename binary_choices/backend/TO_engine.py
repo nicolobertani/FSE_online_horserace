@@ -160,21 +160,23 @@ class TO:
         return out
 
     def fit_utility(self):
+
         """
         Fits the utility function at the end of the trade-off questioning
         """
-        
+        # required to break a loop with otree round_number
         self.iteration = len(self.TO_data) - 2
-        
-        print(self.TO_data)
-        print(self.TO_data.iloc[:-1])
 
-        # # filter out the data
-        # x_0_changes = self.TO_data[self.TO_data['x_0'].diff() != 0]
-        # last_row = self.TO_data.iloc[-1:]
-        # filtered_data = pd.concat([x_0_changes, last_row])
-
-        # print(filtered_data)
+        # create TO sequence
+        filtered_index = self.TO_data.index.values[self.TO_data['x_0'].diff() != 0]
+        x_0 = np.array([self.TO_data['x_0'][filtered_index[0]]])
+        x_other = (self.TO_data['x_0'][filtered_index[1:]].values + self.TO_data['x_1'][filtered_index[1:] - 1].values) / 2
+        x_vec = np.concatenate((x_0, x_other))
+        TO_sequence = (x_vec - x_vec.min()) / (x_vec.max() - x_vec.min())
         
-        # return filtered_data
+        # fit the power utility function, with least squares
+        res = opt.minimize_scalar(lambda par : ((np.linspace(0, 1, len(x_vec)) - TO_sequence ** par) ** 2).sum(), bounds=(0, None), method='bounded')
+
+        return TO_sequence, res.x
+
     
