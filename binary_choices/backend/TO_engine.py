@@ -167,7 +167,7 @@ class TO:
         TO_sequence = (x_vec - x_vec.min()) / (x_vec.max() - x_vec.min())
         
         # fit the power utility function, with least squares
-        res = opt.minimize_scalar(lambda par : ((np.linspace(0, 1, len(x_vec)) - TO_sequence ** par) ** 2).sum())
+        res = opt.minimize_scalar(lambda par : ((np.linspace(0, 1, len(x_vec)) - TO_sequence ** par) ** 2).sum(), bounds=(0.67, 3.3), method='bounded')
         u_par = float(res.x)
         print(u_par)
 
