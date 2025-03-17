@@ -80,8 +80,6 @@ class TO:
         # update x_0 if changed preference or after 5 questions
         if self.last_before_change or (self.TO_question_iteration >= 4):
             
-            print('new', self.TO_question_iteration, self.TO_x_0_count)
-            
             if self.last_before_change:
                 if answer: # respondent chose the lottery with x_0
                     self.x_0 = self.x_1 + self.TO_stepsize / 2
@@ -106,8 +104,6 @@ class TO:
             # update outcomes
             if self.TO_question_iteration == 0:
                 
-                print('first question', self.TO_question_iteration, self.TO_x_0_count)
-
                 if answer: # respondent chose the lottery with x_0
                     self.x_1 += self.TO_stepsize
                 else: # respondent chose the lottery with x_0
@@ -115,8 +111,6 @@ class TO:
 
             else:
                 if self.TO_data.loc[self.iteration - 1, "s"] == int(answer): # respondent keeps on preferring the same lottery
-
-                    print('continue', self.TO_question_iteration, self.TO_x_0_count)
 
                     if answer: # respondent chose the lottery with x_0
                         self.x_1 += self.TO_stepsize
@@ -126,8 +120,6 @@ class TO:
 
                 else: # respondent just changed preference to the other same lottery
                     
-                    print('last', self.TO_question_iteration, self.TO_x_0_count)
-
                     self.last_before_change = True
                     if self.TO_x_0_count >= 3:
                         self.do_TO = False
@@ -175,8 +167,10 @@ class TO:
         TO_sequence = (x_vec - x_vec.min()) / (x_vec.max() - x_vec.min())
         
         # fit the power utility function, with least squares
-        res = opt.minimize_scalar(lambda par : ((np.linspace(0, 1, len(x_vec)) - TO_sequence ** par) ** 2).sum(), bounds=(0, None), method='bounded')
+        res = opt.minimize_scalar(lambda par : ((np.linspace(0, 1, len(x_vec)) - TO_sequence ** par) ** 2).sum())
+        u_par = float(res.x)
+        print(u_par)
 
-        return TO_sequence, res.x
+        return TO_sequence, u_par
 
     
