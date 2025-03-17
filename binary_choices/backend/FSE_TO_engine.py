@@ -34,8 +34,8 @@ class FSE:
         Initiates the attributes
         """
         # questioning ---------------------------------------------------------------
-        self.set_p = set_p
-        self.set_z = set_z
+        self.set_p = np.array(set_p)
+        self.set_z = np.array(set_z)
         self.iteration = 0
         self.finished = False
         self.last_q = False
@@ -64,14 +64,23 @@ class FSE:
         # draw test sample
         self.draw_test_sample()
         
+    def incorporate_utility_transformation(self, TO_sequence, utility_par):
+        self.TO_sequence = TO_sequence
+        self.utility_par = utility_par
 
+        self.train_answers.loc[self.iteration, "w_p"] = (self.utility_transform(self.train_answers.loc[self.iteration, "z"]) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
+    
+    def utility_transform(self, x):
+        u = ((x - self.TO_sequence.min()) / (self.TO_sequence.max() - self.TO_sequence.min())) ** self.utility_par
+        return u
+    
     def get_closest_z(self, z):
         """
         Returns the closest bisection point in the set z
         """
-        distances = np.abs(np.array(self.set_z) - z)
+        distances = np.abs(self.utility_transform(self.set_z) - self.utility_transform(z))
         closest_indices = np.where(distances == np.min(distances))[0]
-        closest_z_values = np.array(self.set_z)[closest_indices]
+        closest_z_values = self.set_z[closest_indices]
         
         if len(closest_z_values) > 1:
             closest_z = np.random.choice(closest_z_values)
@@ -175,14 +184,14 @@ class FSE:
                 self.train_answers.loc[self.iteration, "p_x"] = np.array(self.set_p[candidates])[abs_distance_from_middle == np.max(abs_distance_from_middle)][0]
 
             # compute next z and w.p
-            w_p_t = (self.upper_bound + self.lower_bound)[self.set_p == self.train_answers.loc[self.iteration, "p_x"]] / 2 # p_w wiing lottery
-            candidate_z_t = w_p_t * (shared_info["x"] - shared_info["y"]) + shared_info["y"] # z is sure amount
+            w_p_t = (self.upper_bound + self.lower_bound)[self.set_p == self.train_answers.loc[self.iteration, "p_x"]] / 2 
+            candidate_z_t = w_p_t * (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"])) + self.utility_transform(shared_info["y"]) # z is sure amount
             if (self.set_z is None):
                 self.train_answers.loc[self.iteration, "z"] = candidate_z_t
                 self.train_answers.loc[self.iteration, "w_p"] = w_p_t
             else:
                 self.train_answers.loc[self.iteration, "z"] = self.get_closest_z(candidate_z_t)
-                self.train_answers.loc[self.iteration, "w_p"] = (self.train_answers.loc[self.iteration, "z"] - shared_info["y"]) / (shared_info["x"] - shared_info["y"])
+                self.train_answers.loc[self.iteration, "w_p"] = (self.utility_transform(self.train_answers.loc[self.iteration, "z"]) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
 
             # saves z and p_w
             self.z = self.train_answers.loc[self.iteration, "z"]
