@@ -64,15 +64,24 @@ class FSE:
         # draw test sample
         self.draw_test_sample()
         
-    def incorporate_utility_transformation(self, TO_sequence, utility_par):
-        self.TO_sequence = TO_sequence
+    def incorporate_utility_transformation(self, x_vec, utility_par):
+        self.x_vec = x_vec
         self.utility_par = utility_par
 
         self.train_answers.loc[self.iteration, "w_p"] = (self.utility_transform(self.train_answers.loc[self.iteration, "z"]) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
     
     def utility_transform(self, x):
-        u = ((x - self.TO_sequence.min()) / (self.TO_sequence.max() - self.TO_sequence.min())) ** self.utility_par
-        return u
+        std_x = (x - self.x_vec.min()) / (self.x_vec.max() - self.x_vec.min())
+        u_out = std_x ** self.utility_par
+        return u_out
+
+    def w2z(self, w):
+        z = w * (shared_info["x"] - shared_info["y"]) + shared_info["y"]
+        return z
+
+    def uz2w(self, z):
+        w = (self.utility_transform(z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
+        return w
     
     def get_closest_z(self, z):
         """
@@ -202,13 +211,13 @@ class FSE:
 
             # compute next z and w.p
             w_p_t = (self.upper_bound + self.lower_bound)[self.set_p == self.p_x] / 2 
-            candidate_z_t = w_p_t * (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"])) + self.utility_transform(shared_info["y"]) # z is sure amount
+            candidate_z_t = self.w2z(w_p_t) # z is sure amount
             if (self.set_z is None):
                 self.train_answers.loc[self.iteration, "z"] = candidate_z_t
                 self.train_answers.loc[self.iteration, "w_p"] = w_p_t
             else:
                 self.train_answers.loc[self.iteration, "z"] = self.get_closest_z(candidate_z_t)
-                self.train_answers.loc[self.iteration, "w_p"] = (self.utility_transform(self.train_answers.loc[self.iteration, "z"]) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
+                self.train_answers.loc[self.iteration, "w_p"] = self.uz2w(self.train_answers.loc[self.iteration, "z"])
 
             # saves z
             self.z = self.train_answers.loc[self.iteration, "z"]
@@ -219,7 +228,7 @@ class FSE:
             self.p_x = self.test_sample.iloc[self.test_iteration].loc["p_x"]
             self.test_answers.loc[self.test_iteration, "p_x"] = self.p_x
             w_p_t = self.test_sample.iloc[self.test_iteration].loc["w_p"]
-            self.z = w_p_t * (shared_info["x"] - shared_info["y"]) + shared_info["y"]
+            self.z = self.w2z(w_p_t)
             self.test_answers.loc[self.test_iteration, "z"] = self.z
             self.test_answers.loc[self.test_iteration, "w_p"] = w_p_t
 
@@ -241,7 +250,7 @@ class FSE:
         self.p_x = self.test_sample.iloc[self.test_iteration].loc["p_x"]
         self.test_answers.loc[self.test_iteration, "p_x"] = self.p_x
         w_p_t = self.test_sample.iloc[self.test_iteration].loc["w_p"]
-        self.z = w_p_t * (shared_info["x"] - shared_info["y"]) + shared_info["y"]
+        self.z = self.w2z(w_p_t)
         self.test_answers.loc[self.test_iteration, "z"] = self.z
         self.test_answers.loc[self.test_iteration, "w_p"] = w_p_t
 
