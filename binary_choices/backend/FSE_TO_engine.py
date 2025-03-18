@@ -83,12 +83,16 @@ class FSE:
         w = (self.utility_transform(z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
         return w
     
-    def get_closest_z(self, z):
+    def get_closest_z(self, z_candidate):
         """
         Returns the closest bisection point in the set z
         """
-        std_set_z = (self.utility_transform(self.set_z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
-        std_z = (self.utility_transform(z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
+        # # NON-STANDARDIZED z
+        # distances = np.abs(np.array(self.set_z) - z_candidate)
+        
+        # STANDARDIZED z
+        std_set_z = self.uz2w(self.set_z)
+        std_z = self.uz2w(z_candidate)
         distances = np.abs(std_set_z - std_z)
 
         attempt = 0
@@ -104,13 +108,20 @@ class FSE:
             else:
                 closest_z = closest_z_values[0]
             
-            closest_z_std = (self.utility_transform(closest_z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
-            if (closest_z_std < self.lower_bound[self.set_p == self.p_x]) or (closest_z_std > self.upper_bound[self.set_p == self.p_x]):
+            # next if repeated
+            q_repeated = np.any((self.train_answers["p_x"] == self.p_x) & (self.train_answers["z"] == closest_z))
+            # closest z out of bounds 
+            closest_z_std = self.uz2w(closest_z)
+            out_of_bounds = (closest_z_std < self.lower_bound[self.set_p == self.p_x]) or (closest_z_std > self.upper_bound[self.set_p == self.p_x])
+            if q_repeated or out_of_bounds:
                 attempt += 1
-                warnings.warn("Moved to attempt " + str(attempt) + ".")
+                if closest_z_std:
+                    warnings.warn("Moved to attempt " + str(attempt) + " due to duplicate entry.")
+                else:
+                    warnings.warn("Moved to attempt " + str(attempt) + " due to out of bounds.")
             else:
                 keep_searching = False
-            
+        
         return closest_z
 
     def getEpsilon(self):
