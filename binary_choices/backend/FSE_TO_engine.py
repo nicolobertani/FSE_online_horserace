@@ -115,7 +115,7 @@ class FSE:
             out_of_bounds = (closest_z_std < self.lower_bound[self.set_p == self.p_x]) or (closest_z_std > self.upper_bound[self.set_p == self.p_x])
             if q_repeated or out_of_bounds:
                 attempt += 1
-                if closest_z_std:
+                if q_repeated:
                     warnings.warn("Moved to attempt " + str(attempt) + " due to duplicate entry.")
                 else:
                     warnings.warn("Moved to attempt " + str(attempt) + " due to out of bounds.")
