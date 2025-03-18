@@ -152,7 +152,6 @@ class TO:
         return out
 
     def fit_utility(self):
-
         """
         Fits the utility function at the end of the trade-off questioning
         """
@@ -169,6 +168,5 @@ class TO:
         # fit the power utility function, with least squares
         res = opt.minimize_scalar(lambda par : ((np.linspace(0, 1, len(x_vec)) - TO_sequence ** par) ** 2).sum(), bounds=(0.67, 3.3), method='bounded')
         u_par = float(res.x)
-        print(u_par)
 
         return x_vec, u_par
