@@ -5,7 +5,7 @@ SESSION_CONFIGS = [
         name='FSE_horserace',
         display_name="FSE_horserace",
         app_sequence=['binary_choices'],
-        num_demo_participants=3,
+        num_demo_participants=10,
     ),
 ]
 
@@ -16,7 +16,7 @@ SESSION_CONFIGS = [
 
 SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, 
-    participation_fee=3.0, 
+    participation_fee=2.0, 
     doc=""
 )
 
