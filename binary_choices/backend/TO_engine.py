@@ -171,6 +171,4 @@ class TO:
         u_par = float(res.x)
         print(u_par)
 
-        return TO_sequence, u_par
-
-    
+        return x_vec, u_par
