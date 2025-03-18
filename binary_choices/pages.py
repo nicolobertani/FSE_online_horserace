@@ -215,7 +215,7 @@ class Decision(Page):
                 self.player.z = float(z)
                 self.player.p_x = float(p_x)
 
-            page_number = int(self.player.participant.vars['TO_model'].get_iteration() + self.player.participant.vars['player_model'].get_iteration() + 1)
+            page_number = int(self.player.participant.vars['TO_model'].get_iteration() + self.player.participant.vars['player_model'].get_iteration() + 2)
 
         else:
             if self.subsession.round_number == 1:
