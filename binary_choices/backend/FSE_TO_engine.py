@@ -81,14 +81,27 @@ class FSE:
         std_set_z = (self.utility_transform(self.set_z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
         std_z = (self.utility_transform(z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
         distances = np.abs(std_set_z - std_z)
-        closest_indices = np.where(distances == np.min(distances))[0]
-        closest_z_values = self.set_z[closest_indices]
+
+        attempt = 0
+        keep_searching = True
         
-        if len(closest_z_values) > 1:
-            closest_z = np.random.choice(closest_z_values)
-        else:
-            closest_z = closest_z_values[0]
-        
+        while keep_searching:
+            closest_indices = np.where(distances == np.sort(distances)[attempt])[0]
+            closest_z_values = self.set_z[closest_indices]
+            
+            if len(closest_z_values) > 1: # equally distant points
+                warnings.warn("Equidistant bound split.")
+                closest_z = np.random.choice(closest_z_values)
+            else:
+                closest_z = closest_z_values[0]
+            
+            closest_z_std = (self.utility_transform(closest_z) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
+            if (closest_z_std < self.lower_bound[self.set_p == self.p_x]) or (closest_z_std > self.upper_bound[self.set_p == self.p_x]):
+                attempt += 1
+                warnings.warn("Moved to attempt " + str(attempt) + ".")
+            else:
+                keep_searching = False
+            
         return closest_z
 
     def getEpsilon(self):
@@ -184,9 +197,11 @@ class FSE:
                 warnings.warn('Warning: multiple optimal bisection points')
                 abs_distance_from_middle = np.abs(self.set_p[candidates] - 0.5)
                 self.train_answers.loc[self.iteration, "p_x"] = np.array(self.set_p[candidates])[abs_distance_from_middle == np.max(abs_distance_from_middle)][0]
+            # saves p
+            self.p_x = self.train_answers.loc[self.iteration, "p_x"]
 
             # compute next z and w.p
-            w_p_t = (self.upper_bound + self.lower_bound)[self.set_p == self.train_answers.loc[self.iteration, "p_x"]] / 2 
+            w_p_t = (self.upper_bound + self.lower_bound)[self.set_p == self.p_x] / 2 
             candidate_z_t = w_p_t * (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"])) + self.utility_transform(shared_info["y"]) # z is sure amount
             if (self.set_z is None):
                 self.train_answers.loc[self.iteration, "z"] = candidate_z_t
@@ -195,9 +210,8 @@ class FSE:
                 self.train_answers.loc[self.iteration, "z"] = self.get_closest_z(candidate_z_t)
                 self.train_answers.loc[self.iteration, "w_p"] = (self.utility_transform(self.train_answers.loc[self.iteration, "z"]) - self.utility_transform(shared_info["y"])) / (self.utility_transform(shared_info["x"]) - self.utility_transform(shared_info["y"]))
 
-            # saves z and p_w
+            # saves z
             self.z = self.train_answers.loc[self.iteration, "z"]
-            self.p_x = self.train_answers.loc[self.iteration, "p_x"]
 
         else:
             
