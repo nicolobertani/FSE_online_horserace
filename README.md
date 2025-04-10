@@ -22,6 +22,21 @@ pip install -r requirements.txt
 Usage requires familiarity with otree.
 In case you are new to otree, here is the link to the [project homepage](https://www.otree.org/).
 
+The script [`otree_local_setup.sh`](otree_local_setup.sh) automates the setup of several common otree parameters in case the experiment is to be run locally.
+
+```bash
+bash otree_local_setup.sh
+```
+
+Most probably, this experiment will be distributed over the internet.
+For this, using [Heroku](https://www.heroku.com/) is a popular and quick options.
+For convenience, we provide the script [`heroku_deployment.sh`](heroku_deployment.sh) that can be run to deploy your software on Heroku, provided that you have it properly setup.
+
+```bash
+bash heroku_deployment.sh
+```
+
+Note that the script is provided for convenience and it is not guaranteed to work on your machine nor to be sufficient for the setup you desire.
 
 
 ### Personalization
