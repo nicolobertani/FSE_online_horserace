@@ -3,7 +3,7 @@
 
 ### Introduction
 
-This repo contains the code to implement the Fast and Simple Elicitation method of [Bertani, Diecidue, Perny, and Viappiani (WP)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3569625).
+This repo contains the code to implement the Fast and Simple Elicitation method of [Bertani, Diecidue, Perny, and Viappiani (2026, Management Science, https://doi.org/10.1287/mnsc.2025.01348)](https://doi.org/10.1287/mnsc.2025.01348).
 More specifically, it provides Python code to run an online experiment with FSE and the competing methods described in Section 4.3 and in Online Appendix OA.E.
 If you are interested in running these methods locally (e.g. for a laboratory experiment), please refer to [this different repo](https://github.com/nicolobertani/FSE), where you can find a more suitable implementation using just Python.
 
